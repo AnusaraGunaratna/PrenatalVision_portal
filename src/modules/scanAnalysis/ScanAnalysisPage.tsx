@@ -18,7 +18,7 @@ import { UploadZone } from "../../libs/components/UploadZone";
 import { ModeSelector } from "../../libs/components/ModeSelector";
 import { LoadingPortal } from "../../libs/components/LoadingPortal";
 import { ErrorBanner } from "../../libs/components/ErrorBanner";
-import { StepVisualizer } from "./components/StepVisualizer";
+import { ImageAnalysisFlow } from "./components/ImageAnalysisFlow";
 import { ModelComparisonTable } from "./components/ModelComparisonTable";
 import strings from "./strings.json";
 
@@ -74,24 +74,21 @@ export const ScanAnalysisPage = () => {
     reset();
   };
 
-  // Derive best model data
   const bestModel = data?.models_comparison.find(
     (m) => m.model_name === data.best_model_name,
   );
   const bestAnnotatedImage = bestModel?.annotated_image_base64 || "";
 
-  // Collect all unique structure names from detections
   const allStructures = data
     ? [
-      ...new Set(
-        data.models_comparison.flatMap((m) =>
-          m.detections.map((d) => d.class_name),
+        ...new Set(
+          data.models_comparison.flatMap((m) =>
+            m.detections.map((d) => d.class_name),
+          ),
         ),
-      ),
-    ]
+      ]
     : [];
 
-  // Build measurements display
   const measurements =
     data?.best_model_measurements || bestModel?.measurements || {};
 
@@ -103,14 +100,15 @@ export const ScanAnalysisPage = () => {
           <p>{strings["scan.subtitle"]}</p>
         </div>
         <div className="user-bar">
-          <span className="user-greeting">Welcome, <strong>{user?.fullName}</strong></span>
+          <span className="user-greeting">
+            Welcome, <strong>{user?.fullName}</strong>
+          </span>
           <button className="logout-btn" onClick={logout}>
             <LogOut size={14} /> Logout
           </button>
         </div>
       </header>
 
-      {/* ── Upload State ── */}
       {!data && !isLoading && (
         <div className="upload-container">
           <ModeSelector mode={scanMode} onModeChange={setScanMode} />
@@ -242,11 +240,14 @@ export const ScanAnalysisPage = () => {
             </GlassPanel>
           )}
 
-          {/* Annotated Image Visualizer */}
+          {/* Image Analysis Pipeline */}
           {bestAnnotatedImage && (
-            <StepVisualizer
+            <ImageAnalysisFlow
+              originalBase64={data.original_image_base64}
+              enhancedBase64={data.enhanced_image_base64}
+              annotatedBase64={bestAnnotatedImage}
               bestModelName={data.best_model_name}
-              detectedBase64={bestAnnotatedImage}
+              detections={bestModel?.detections || []}
             />
           )}
 
