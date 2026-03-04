@@ -6,7 +6,9 @@ import {
   Info,
   RefreshCw,
   List,
+  LogOut,
 } from "lucide-react";
+import { useAuth } from "../../libs/context/AuthContext";
 import { useScanApi } from "../../libs/hooks/useScanApi";
 import { Button } from "../../libs/components/Button";
 import { GlassPanel } from "../../libs/components/GlassPanel";
@@ -45,6 +47,7 @@ const getFullName = (abbrev: string): string =>
 
 export const ScanAnalysisPage = () => {
   const { analyzeScan, isLoading, error, data, reset } = useScanApi();
+  const { user, logout } = useAuth();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [scanMode, setScanMode] = useState<ScanMode>("CRL");
@@ -80,12 +83,12 @@ export const ScanAnalysisPage = () => {
   // Collect all unique structure names from detections
   const allStructures = data
     ? [
-        ...new Set(
-          data.models_comparison.flatMap((m) =>
-            m.detections.map((d) => d.class_name),
-          ),
+      ...new Set(
+        data.models_comparison.flatMap((m) =>
+          m.detections.map((d) => d.class_name),
         ),
-      ]
+      ),
+    ]
     : [];
 
   // Build measurements display
@@ -95,8 +98,16 @@ export const ScanAnalysisPage = () => {
   return (
     <>
       <header className="header">
-        <h1>PrenatalVision</h1>
-        <p>{strings["scan.subtitle"]}</p>
+        <div>
+          <h1>PrenatalVision</h1>
+          <p>{strings["scan.subtitle"]}</p>
+        </div>
+        <div className="user-bar">
+          <span className="user-greeting">Welcome, <strong>{user?.fullName}</strong></span>
+          <button className="logout-btn" onClick={logout}>
+            <LogOut size={14} /> Logout
+          </button>
+        </div>
       </header>
 
       {/* ── Upload State ── */}
