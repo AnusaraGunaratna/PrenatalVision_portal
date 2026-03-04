@@ -1,0 +1,29 @@
+/* ───────────────────────────────────────────────
+   Base — Reset, body, app layout, font imports.
+   ─────────────────────────────────────────────── */
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-family);
+    background-color: var(--bg-dark);
+    background-image:
+        radial-gradient(at 0% 0%, var(--primary-subtle) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(139, 92, 246, 0.15) 0px, transparent 50%);
+    color: var(--text-main);
+    min-height: 100vh;
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+.app {
+    max-width: var(--max-width-app);
+    margin: 0 auto;
+    padding: var(--sp-16) var(--sp-10);
+}

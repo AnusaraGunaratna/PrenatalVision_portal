@@ -1,0 +1,68 @@
+/* ───────────────────────────────────────────────
+   Animations — All keyframes
+   ─────────────────────────────────────────────── */
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1.1);
+        opacity: 0.8;
+    }
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ── Animation Utility Classes ── */
+.anim-slide-in {
+    animation: slideIn 0.5s ease-out;
+}
+
+.anim-fade-in {
+    animation: fadeIn 0.6s ease-out;
+}
+
+.anim-pulse {
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.anim-slide-down {
+    animation: slideDown 0.3s ease-out;
+}

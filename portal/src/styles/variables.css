@@ -1,0 +1,116 @@
+/* ───────────────────────────────────────────────
+   Design Tokens — PrenatalVision
+   All reusable sizes, colors, spacing, typography.
+   ─────────────────────────────────────────────── */
+
+:root {
+    /* ── Colors ── */
+    --primary: #6366f1;
+    --primary-hover: #4f46e5;
+    --primary-glow: rgba(99, 102, 241, 0.5);
+    --primary-subtle: rgba(99, 102, 241, 0.15);
+    --primary-faint: rgba(99, 102, 241, 0.1);
+    --primary-border: rgba(99, 102, 241, 0.25);
+
+    --bg-dark: #020617;
+    --glass: rgba(15, 23, 42, 0.6);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --glass-hover: rgba(255, 255, 255, 0.05);
+    --glass-row: rgba(255, 255, 255, 0.03);
+
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+
+    --success: #10b981;
+    --success-bg: rgba(16, 185, 129, 0.15);
+    --success-border: rgba(16, 185, 129, 0.25);
+    --success-highlight: rgba(16, 185, 129, 0.1);
+
+    --warning: #f59e0b;
+    --warning-bg: rgba(245, 158, 11, 0.15);
+    --warning-border: rgba(245, 158, 11, 0.25);
+
+    --danger: #ef4444;
+    --danger-bg: rgba(239, 68, 68, 0.15);
+    --danger-border: rgba(239, 68, 68, 0.25);
+
+    /* ── Typography ── */
+    --font-family: 'Outfit', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+
+    --fs-xs: 0.65rem;
+    --fs-sm: 0.75rem;
+    --fs-base: 0.85rem;
+    --fs-md: 0.9rem;
+    --fs-lg: 1rem;
+    --fs-xl: 1.1rem;
+    --fs-2xl: 1.25rem;
+    --fs-3xl: 1.35rem;
+    --fs-4xl: 1.5rem;
+    --fs-hero: 3.5rem;
+
+    --fw-light: 300;
+    --fw-regular: 400;
+    --fw-medium: 500;
+    --fw-semibold: 600;
+    --fw-bold: 700;
+
+    /* ── Spacing ── */
+    --sp-1: 0.15rem;
+    --sp-2: 0.25rem;
+    --sp-3: 0.35rem;
+    --sp-4: 0.5rem;
+    --sp-5: 0.6rem;
+    --sp-6: 0.75rem;
+    --sp-7: 0.85rem;
+    --sp-8: 1rem;
+    --sp-9: 1.25rem;
+    --sp-10: 1.5rem;
+    --sp-12: 2rem;
+    --sp-14: 2.5rem;
+    --sp-16: 3rem;
+    --sp-20: 4rem;
+
+    /* ── Radii ── */
+    --radius-sm: 0.25rem;
+    --radius-md: 0.5rem;
+    --radius-lg: 0.6rem;
+    --radius-xl: 0.75rem;
+    --radius-2xl: 1rem;
+    --radius-3xl: 1.5rem;
+    --radius-full: 2rem;
+
+    /* ── Shadows ── */
+    --shadow-card: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    --shadow-btn: 0 4px 12px rgba(99, 102, 241, 0.3);
+    --shadow-btn-hover: 0 6px 16px rgba(99, 102, 241, 0.4);
+    --shadow-glow: 0 0 20px var(--primary-glow);
+    --shadow-float: 0 8px 32px rgba(0, 0, 0, 0.3);
+    --shadow-danger: 0 8px 24px rgba(239, 68, 68, 0.3);
+
+    /* ── Sizes ── */
+    --max-width-app: 1200px;
+    --max-width-upload: 700px;
+    --max-width-error: 500px;
+    --max-width-mismatch: 500px;
+    --icon-sm: 14px;
+    --icon-md: 16px;
+    --icon-lg: 20px;
+    --icon-xl: 32px;
+    --icon-hero: 40px;
+    --icon-mismatch: 48px;
+    --preview-img: 160px;
+    --upload-icon: 64px;
+    --pulse-ring: 100px;
+    --conf-bar-w: 60px;
+    --conf-bar-h: 4px;
+
+    /* ── Z-index ── */
+    --z-float: 100;
+
+    /* ── Transitions ── */
+    --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+    --duration-fast: 0.25s;
+    --duration-normal: 0.3s;
+    --duration-slow: 0.4s;
+}

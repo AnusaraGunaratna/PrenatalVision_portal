@@ -1,0 +1,18 @@
+{
+    "scan.title": "FUSEP Scan Analysis",
+    "scan.subtitle": "Upload a fetal ultrasound image to run the multi-model CRL and NT detection pipeline.",
+    "scan.upload.placeholder": "Click or drag an image here to upload",
+    "scan.upload.supported": "Supported formats: JPEG, PNG, DICOM",
+    "scan.button.analyze": "Analyze Scan",
+    "scan.button.comparing": "Comparing Models...",
+    "scan.button.viewComparisons": "View Model Comparisons",
+    "scan.error.noFile": "Please select a file to upload.",
+    "scan.type.crl": "CRL (Crown-Rump Length)",
+    "scan.type.nt": "NT (Nuchal Translucency)",
+    "scan.modal.title": "YOLO Multi-Model Comparison",
+    "scan.modal.close": "Close",
+    "scan.table.model": "Model Variant",
+    "scan.table.structure": "Structure",
+    "scan.table.confidence": "Confidence Score",
+    "scan.table.measurement": "Measurement"
+}
