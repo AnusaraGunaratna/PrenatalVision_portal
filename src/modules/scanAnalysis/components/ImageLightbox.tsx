@@ -23,9 +23,11 @@ export const ImageLightbox: FC<Props> = ({ src, alt, onClose, detectionOverlay }
 
     return (
         <div className="lightbox-overlay" onClick={onClose}>
-            <div className="lightbox-content" onClick={e => e.stopPropagation()} style={{ position: "relative" }}>
-                <img src={src} alt={alt} className="lightbox-img" />
-                {detectionOverlay}
+            <div className="lightbox-content" onClick={e => e.stopPropagation()}>
+                <div style={{ position: "relative", display: "inline-block" }}>
+                    <img src={src} alt={alt} className="lightbox-img" />
+                    {detectionOverlay}
+                </div>
                 <span className="lightbox-caption">{alt}</span>
             </div>
             <button className="lightbox-close" onClick={onClose}>✕</button>

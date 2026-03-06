@@ -192,9 +192,7 @@ export const ScanAnalysisPage = () => {
               <strong>{MIN_DETECTIONS}</strong>
               {strings["scan.quality.detectedEnd"]}
             </p>
-            <p className="hint-text">
-              {strings["scan.quality.hint"]}
-            </p>
+            <p className="hint-text">{strings["scan.quality.hint"]}</p>
             <Button onClick={forceReset} className="retry-btn">
               <RefreshCw size={18} /> {strings["scan.quality.retry"]}
             </Button>
@@ -204,82 +202,89 @@ export const ScanAnalysisPage = () => {
 
       {data && !isLoading && !insufficientDetections && (
         <div className="results-container anim-fade-in">
-          <div className="results-header-grid">
-            <GlassPanel className="stat-card">
-              <h2>
-                <ShieldCheck size={20} /> Analysis Summary
-              </h2>
-              <div className="summary-status-row">
-                <Badge variant={data.scan_type === "crl" ? "crl" : "nt"}>
-                  {data.scan_type === "crl"
-                    ? "Crown-Rump Length View"
-                    : "Nuchal Translucency View"}
-                </Badge>
+          <GlassPanel className="stat-card summary-measurements-card">
+            <div className="summary-measurements-header">
+              <div className="summary-left">
+                <h2>
+                  <ShieldCheck size={20} /> Analysis Summary
+                </h2>
+                <div className="summary-status-row">
+                  <Badge variant={data.scan_type === "crl" ? "crl" : "nt"}>
+                    {data.scan_type === "crl"
+                      ? "Crown-Rump Length View"
+                      : "Nuchal Translucency View"}
+                  </Badge>
+                </div>
+                <div className="metrics-grid">
+                  <MetricItem
+                    value={allStructures.length}
+                    label="Unique Structures"
+                  />
+                  <MetricItem
+                    value={bestModel?.detections.length ?? 0}
+                    label="Detections"
+                  />
+                </div>
               </div>
-              <div className="metrics-grid">
-                <MetricItem
-                  value={data.models_comparison.reduce(
-                    (sum, m) => sum + m.detections.length,
-                    0,
-                  )}
-                  label="Total Detections"
-                />
-                <MetricItem
-                  value={allStructures.length}
-                  label="Unique Structures"
-                />
-                <MetricItem
-                  value={data.models_comparison.length}
-                  label="Models Compared"
-                />
-              </div>
-            </GlassPanel>
 
-            <GlassPanel className="stat-card">
-              <h2>
-                <Ruler size={20} /> Biometric Measurements
-              </h2>
-              <div className="measurements-list">
-                {Object.keys(measurements).length > 0 ? (
-                  Object.entries(measurements).map(([key, value]) => {
-                    let measureText = "";
-                    if (value.thickness_mm)
-                      measureText = `${value.thickness_mm} mm`;
-                    else if (value.length_mm)
-                      measureText = `${value.length_mm} mm`;
-                    else if (value.length_cm)
-                      measureText = `${value.length_cm} cm`;
-                    else if (value.dimension_mm)
-                      measureText = value.dimension_mm;
-                    else if (value.BPD_mm)
-                      measureText = `BPD: ${value.BPD_mm}mm`;
-                    if (value.HC_mm) measureText += ` HC: ${value.HC_mm}mm`;
+              <div className="summary-divider" />
 
-                    return (
-                      <div key={key} className="measurement-item">
-                        <div className="m-label">
-                          <strong>{key}</strong>
-                          <span className="m-fullname">
-                            ({getFullName(key)})
-                          </span>
+              <div className="summary-right">
+                <h2>
+                  <Ruler size={20} /> Biometric Measurements
+                </h2>
+                <div className="measurements-list">
+                  {(() => {
+                    const rows: { label: string; value: string; approx?: boolean }[] = [];
+
+                    Object.entries(measurements).forEach(([key, m]) => {
+                      if (key === "Head") {
+                        if (m.BPD_mm)
+                          rows.push({ label: "Biparietal Diameter", value: `${m.BPD_mm} mm` });
+                        if (m.HC_mm)
+                          rows.push({ label: "Head Circumference", value: `${m.HC_mm} mm` });
+                      } else if (key === "Abdomen") {
+                        if (m.circumference_mm)
+                          rows.push({ label: "Abdominal Circumference", value: `${m.circumference_mm} mm` });
+                      } else {
+                        let val = "";
+                        if (m.thickness_mm) val = `${m.thickness_mm} mm`;
+                        else if (m.length_mm) val = `${m.length_mm} mm`;
+                        if (val) {
+                          const displayName = key === "NT"
+                            ? `${getFullName(key)} (NT)`
+                            : getFullName(key);
+                          rows.push({ label: displayName, value: val, approx: m.approximate });
+                        }
+                      }
+                    });
+
+                    return rows.length > 0 ? (
+                      rows.map((r) => (
+                        <div key={r.label} className="measurement-item">
+                          <div className="m-label">
+                            <strong>{r.label}</strong>
+                          </div>
+                          <div className="m-value">
+                            {r.value}
+                            {r.approx && (
+                              <span className="m-approx" title="Estimated from bounding box, not caliper-based">
+                                ~ approx
+                              </span>
+                            )}
+                          </div>
                         </div>
-                        <div className="m-value">{measureText || "-"}</div>
-                      </div>
+                      ))
+                    ) : (
+                      <p style={{ color: "var(--text-muted)", fontSize: "var(--fs-base)" }}>
+                        No biometric measurements available.
+                      </p>
                     );
-                  })
-                ) : (
-                  <p
-                    style={{
-                      color: "var(--text-muted)",
-                      fontSize: "var(--fs-base)",
-                    }}
-                  >
-                    No biometric measurements available.
-                  </p>
-                )}
+                  })()}
+                </div>
               </div>
-            </GlassPanel>
-          </div>
+            </div>
+          </GlassPanel>
 
           {allStructures.length > 0 && (
             <GlassPanel className="stat-card">

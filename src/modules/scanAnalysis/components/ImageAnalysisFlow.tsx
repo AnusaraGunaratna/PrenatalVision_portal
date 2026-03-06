@@ -1,4 +1,4 @@
-import { FC, useState, useEffect } from "react";
+import { FC, useState, useEffect, useRef } from "react";
 import { ArrowRight, Eye, EyeOff, ZoomIn } from "lucide-react";
 import { GlassPanel } from "../../../libs/components/GlassPanel";
 import { ImageLightbox } from "./ImageLightbox";
@@ -39,6 +39,37 @@ const STRUCTURE_NAMES: Record<string, string> = {
   NB: "Nasal Bone",
   NT: "Nuchal Translucency",
   CRL: "Crown-Rump Length",
+};
+
+const DetectionThumbnail: FC<{
+  det: Detection;
+  enhancedBase64: string;
+  renderDetectionBox: (
+    det: ActiveDetection,
+    isThumbnail: boolean,
+    containerEl?: HTMLElement | null,
+  ) => React.ReactNode;
+  onClick: () => void;
+}> = ({ det, enhancedBase64, renderDetectionBox, onClick }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
+  return (
+    <div className="flow-gallery-item" onClick={onClick}>
+      <div
+        ref={containerRef}
+        className="flow-gallery-img"
+        style={{ position: "relative" }}
+      >
+        <img src={enhancedBase64} alt={det.class_name} />
+        {mounted && renderDetectionBox(det, true, containerRef.current)}
+      </div>
+      <div className="flow-gallery-info">
+        <strong>{det.class_name}</strong>
+      </div>
+    </div>
+  );
 };
 
 const DETECTION_COLORS: Record<string, string> = {
@@ -94,20 +125,47 @@ export const ImageAnalysisFlow: FC<Props> = ({
     img.src = enhancedBase64;
   }, [enhancedBase64]);
 
-  const renderDetectionBox = (det: ActiveDetection, isThumbnail: boolean) => {
+  const renderDetectionBox = (
+    det: ActiveDetection,
+    isThumbnail: boolean,
+    containerEl?: HTMLElement | null,
+  ) => {
     if (!imgDims.w || !imgDims.h) return null;
     const [x1, y1, x2, y2] = det.bbox;
     const color = DETECTION_COLORS[det.class_name] || "#00FF00";
+
+    let offsetLeft = 0;
+    let offsetTop = 0;
+    let visibleW = 100;  
+    let visibleH = 100;
+
+    if (isThumbnail && containerEl) {
+      const cW = containerEl.clientWidth;
+      const cH = containerEl.clientHeight;
+      if (cW > 0 && cH > 0) {
+        const imgAspect = imgDims.w / imgDims.h;
+        const cAspect = cW / cH;
+        if (imgAspect > cAspect) {
+          const renderH = cW / imgAspect;
+          offsetTop = ((cH - renderH) / 2 / cH) * 100;
+          visibleH = (renderH / cH) * 100;
+        } else {
+          const renderW = cH * imgAspect;
+          offsetLeft = ((cW - renderW) / 2 / cW) * 100;
+          visibleW = (renderW / cW) * 100;
+        }
+      }
+    }
 
     return (
       <div
         style={{
           position: "absolute",
-          left: `${(x1 / imgDims.w) * 100}%`,
-          top: `${(y1 / imgDims.h) * 100}%`,
-          width: `${((x2 - x1) / imgDims.w) * 100}%`,
-          height: `${((y2 - y1) / imgDims.h) * 100}%`,
-          border: `${isThumbnail ? 2 : 4}px solid ${color}`,
+          left: `${offsetLeft + (x1 / imgDims.w) * visibleW}%`,
+          top: `${offsetTop + (y1 / imgDims.h) * visibleH}%`,
+          width: `${((x2 - x1) / imgDims.w) * visibleW}%`,
+          height: `${((y2 - y1) / imgDims.h) * visibleH}%`,
+          border: `${isThumbnail ? 2 : 3}px solid ${color}`,
           pointerEvents: "none",
           zIndex: 10,
         }}
@@ -115,17 +173,17 @@ export const ImageAnalysisFlow: FC<Props> = ({
         <div
           style={{
             position: "absolute",
-            top: isThumbnail ? "-20px" : "-28px",
-            left: isThumbnail ? "-2px" : "-4px",
+            top: isThumbnail ? "-18px" : "-26px",
+            left: isThumbnail ? "-2px" : "-3px",
             background: color,
             color: "#FFF",
-            padding: isThumbnail ? "2px 4px" : "4px 8px",
-            fontSize: isThumbnail ? "10px" : "14px",
+            padding: isThumbnail ? "1px 3px" : "3px 7px",
+            fontSize: isThumbnail ? "9px" : "13px",
             fontWeight: "bold",
             whiteSpace: "nowrap",
           }}
         >
-          {det.class_name} {(det.confidence * 100).toFixed(0)}%
+          {det.class_name}
         </div>
       </div>
     );
@@ -181,9 +239,11 @@ export const ImageAnalysisFlow: FC<Props> = ({
             {showIndividual && detections.length > 0 && (
               <div className="flow-gallery anim-slide-down">
                 {detections.map((det, idx) => (
-                  <div
+                  <DetectionThumbnail
                     key={idx}
-                    className="flow-gallery-item"
+                    det={det}
+                    enhancedBase64={enhancedBase64}
+                    renderDetectionBox={renderDetectionBox}
                     onClick={() =>
                       openLightbox(
                         enhancedBase64,
@@ -191,15 +251,7 @@ export const ImageAnalysisFlow: FC<Props> = ({
                         det
                       )
                     }
-                  >
-                    <div className="flow-gallery-img" style={{ position: "relative" }}>
-                      <img src={enhancedBase64} alt={det.class_name} />
-                      {renderDetectionBox(det, true)}
-                    </div>
-                    <div className="flow-gallery-info">
-                      <strong>{det.class_name}</strong>
-                    </div>
-                  </div>
+                  />
                 ))}
               </div>
             )}
