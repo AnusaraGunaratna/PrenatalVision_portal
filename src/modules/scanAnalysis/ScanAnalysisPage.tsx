@@ -6,6 +6,7 @@ import {
   Info,
   RefreshCw,
   List,
+  AlertTriangle,
 } from "lucide-react";
 import { useScanApi } from "../../libs/hooks/useScanApi";
 import { Button } from "../../libs/components/Button";
@@ -63,8 +64,7 @@ export const ScanAnalysisPage = () => {
   const handleAnalyze = async () => {
     if (!selectedFile) return;
     try {
-      const scanType = scanMode === "AUTO" ? "crl" : scanMode.toLowerCase();
-      await analyzeScan(selectedFile, scanType);
+      await analyzeScan(selectedFile, scanMode.toLowerCase());
     } catch (err) {
       console.error(err);
     }
@@ -110,7 +110,7 @@ export const ScanAnalysisPage = () => {
         })),
         calibration_ratio: data.models_comparison[0]?.measurements?.length_mm
           ? undefined
-          : null, 
+          : null,
       });
     } catch (err) {
       console.error("Failed to save scan:", err);
@@ -135,9 +135,12 @@ export const ScanAnalysisPage = () => {
   const measurements =
     data?.best_model_measurements || bestModel?.measurements || {};
 
+  const MIN_DETECTIONS = 4;
+  const insufficientDetections =
+    data && bestModel ? bestModel.detections.length < MIN_DETECTIONS : false;
+
   return (
     <>
-
       {!data && !isLoading && (
         <div className="upload-container">
           <UploadZone onFileSelect={handleFileSelect} />
@@ -177,7 +180,29 @@ export const ScanAnalysisPage = () => {
 
       {error && <ErrorBanner message={error} />}
 
-      {data && !isLoading && (
+      {data && !isLoading && insufficientDetections && (
+        <div className="insufficient-quality anim-fade-in">
+          <GlassPanel className="insufficient-quality-card">
+            <AlertTriangle size={48} className="warning-icon" />
+            <h2>{strings["scan.quality.title"]}</h2>
+            <p>
+              {strings["scan.quality.detectedPrefix"]}
+              <strong>{bestModel?.detections.length ?? 0}</strong>
+              {strings["scan.quality.detectedSuffix"]}
+              <strong>{MIN_DETECTIONS}</strong>
+              {strings["scan.quality.detectedEnd"]}
+            </p>
+            <p className="hint-text">
+              {strings["scan.quality.hint"]}
+            </p>
+            <Button onClick={forceReset} className="retry-btn">
+              <RefreshCw size={18} /> {strings["scan.quality.retry"]}
+            </Button>
+          </GlassPanel>
+        </div>
+      )}
+
+      {data && !isLoading && !insufficientDetections && (
         <div className="results-container anim-fade-in">
           <div className="results-header-grid">
             <GlassPanel className="stat-card">
@@ -315,7 +340,7 @@ export const ScanAnalysisPage = () => {
         </button>
       )}
 
-      {data && !isLoading && (
+      {data && !isLoading && !insufficientDetections && (
         <button
           className={`floating-save ${isSaved ? "saved" : ""}`}
           onClick={handleSave}
