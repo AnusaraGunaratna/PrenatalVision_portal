@@ -1,10 +1,4 @@
-/* ───────────────────────────────────────────────
-   Shared Component Styles
-   Glass panels, buttons, badges, metrics, inputs,
-   upload zones, cards, tables, etc.
-   ─────────────────────────────────────────────── */
-
-/* ── Glass Panel ── */
+/*  Glass Panel  */
 .glass-panel {
     background: var(--glass);
     backdrop-filter: blur(12px);
@@ -14,7 +8,7 @@
     box-shadow: var(--shadow-card);
 }
 
-/* ── Header ── */
+/*  Header  */
 .header {
     display: flex;
     justify-content: space-between;
@@ -39,7 +33,7 @@
     font-weight: var(--fw-light);
 }
 
-/* ── Buttons ── */
+/*  Buttons  */
 .btn {
     padding: var(--sp-6) var(--sp-10);
     border-radius: var(--radius-xl);
@@ -102,7 +96,7 @@
     color: var(--text-main);
 }
 
-/* ── Badges ── */
+/*  Badges  */
 .badge {
     padding: var(--sp-3) var(--sp-6);
     border-radius: var(--radius-full);
@@ -137,7 +131,7 @@
     border: 1px solid var(--glass-border);
 }
 
-/* ── Risk Badges ── */
+/*  Risk Badges  */
 .risk-badge {
     display: inline-block;
     padding: var(--sp-1) var(--sp-4);
@@ -163,7 +157,7 @@
     color: var(--danger);
 }
 
-/* ── Upload Zone ── */
+/*  Upload Zone  */
 .upload-container {
     max-width: var(--max-width-upload);
     margin: 0 auto var(--sp-16);
@@ -228,7 +222,7 @@
     opacity: 0.6;
 }
 
-/* ── Preview Card ── */
+/*  Preview Card  */
 .preview-card {
     display: flex;
     align-items: center;
@@ -257,7 +251,7 @@
     margin-bottom: var(--sp-8);
 }
 
-/* ── Mode Selector ── */
+/*  Mode Selector  */
 .mode-selector {
     text-align: center;
     margin-bottom: var(--sp-12);
@@ -315,7 +309,63 @@
     color: var(--text-muted);
 }
 
-/* ── Stat Card ── */
+/* Scan Action Bar */
+.scan-action-bar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--sp-8);
+    padding: var(--sp-12);
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-xl);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    margin-top: var(--sp-8);
+}
+
+.scan-action-preview {
+    width: 100%;
+    max-height: 260px;
+    object-fit: contain;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--glass-border);
+}
+
+.scan-action-file-info {
+    text-align: center;
+}
+
+.scan-action-file-info h4 {
+    font-size: var(--fs-lg);
+    font-weight: var(--fw-semibold);
+    color: var(--text-main);
+    margin-bottom: var(--sp-1);
+}
+
+.scan-action-file-info p {
+    font-size: var(--fs-sm);
+    color: var(--text-muted);
+}
+
+.scan-action-divider {
+    width: 60%;
+    height: 1px;
+    background: var(--glass-border);
+    margin: var(--sp-2) 0;
+}
+
+.scan-action-bar .mode-selector {
+    margin-bottom: 0;
+}
+
+.scan-action-bar .analyze-btn {
+    width: 100%;
+    max-width: 280px;
+    justify-content: center;
+}
+
+/*  Stat Card */
 .stat-card {
     padding: 1.75rem var(--sp-12);
 }
@@ -363,7 +413,7 @@
     flex-wrap: wrap;
 }
 
-/* ── Summary Row ── */
+/*  Summary Row  */
 .summary-status-row {
     display: flex;
     align-items: center;
@@ -382,7 +432,7 @@
     margin: 0;
 }
 
-/* ── Metrics Grid ── */
+/*  Metrics Grid  */
 .metrics-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
@@ -414,7 +464,7 @@
     margin-top: var(--sp-2);
 }
 
-/* ── Measurements List ── */
+/*  Measurements List  */
 .measurements-list {
     display: flex;
     flex-direction: column;
@@ -448,7 +498,7 @@
     color: var(--success);
 }
 
-/* ── Results Dashboard ── */
+/*  Results Dashboard  */
 .results-container {
     display: flex;
     flex-direction: column;
@@ -461,7 +511,7 @@
     gap: var(--sp-10);
 }
 
-/* ── Block Table (Detected Structures) ── */
+/*  Block Table (Detected Structures)  */
 .block-table {
     margin-top: var(--sp-8);
 }
@@ -514,7 +564,7 @@
     color: var(--text-main);
 }
 
-/* ── Main Image Visuals ── */
+/*  Main Image Visuals  */
 .visual-main-card {
     padding: var(--sp-12);
 }
@@ -533,7 +583,7 @@
     display: block;
 }
 
-/* ── Gallery ── */
+/*  Gallery  */
 .gallery {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
@@ -585,7 +635,7 @@
     color: var(--text-muted);
 }
 
-/* ── Model Comparison Grid ── */
+/*  Model Comparison Grid  */
 .model-comparison-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -637,7 +687,7 @@
     color: var(--text-muted);
 }
 
-/* ── Structure Comparison Table ── */
+/*  Structure Comparison Table  */
 .structure-table-wrapper {
     overflow-x: auto;
 }
@@ -693,7 +743,7 @@
     background: var(--glass-row);
 }
 
-/* ── Analytics Panel ── */
+/*  Analytics Panel  */
 .analytics-panel {
     margin-top: var(--sp-10);
     padding: 0;
@@ -745,7 +795,7 @@
     color: var(--text-muted);
 }
 
-/* ── Detections List ── */
+/*  Detections List  */
 .detections-list {
     display: flex;
     flex-direction: column;
@@ -790,7 +840,7 @@
     border-radius: 2px;
 }
 
-/* ── Loading Portal ── */
+/*  Loading Portal  */
 .loading-portal {
     display: flex;
     flex-direction: column;
@@ -814,7 +864,7 @@
     color: var(--text-muted);
 }
 
-/* ── Error Banner ── */
+/*  Error Banner  */
 .error-banner {
     text-align: center;
     padding: var(--sp-12);
@@ -830,7 +880,7 @@
     margin-bottom: var(--sp-4);
 }
 
-/* ── Mismatch Dialog ── */
+/*  Mismatch Dialog  */
 .mismatch-dialog {
     max-width: var(--max-width-mismatch);
     margin: var(--sp-12) auto;
@@ -886,7 +936,7 @@
     min-width: 160px;
 }
 
-/* ── Floating Reset ── */
+/*  Floating Reset  */
 .floating-reset {
     position: fixed;
     bottom: var(--sp-12);
@@ -917,7 +967,7 @@
     transform: translateY(-2px);
 }
 
-/* ── System Info Footer ── */
+/*  System Info Footer  */
 .system-info-footer {
     display: flex;
     justify-content: center;
@@ -935,7 +985,7 @@
     font-family: monospace;
 }
 
-/* ── Structure Chips ── */
+/*  Structure Chips  */
 .structures-grid {
     display: flex;
     flex-wrap: wrap;
@@ -977,7 +1027,7 @@
     font-weight: var(--fw-regular);
 }
 
-/* ── Analysis Flow Pipeline ── */
+/*  Analysis Flow Pipeline  */
 .analysis-flow-card {
     padding: var(--sp-12);
 }
@@ -1099,7 +1149,7 @@
     margin-bottom: var(--sp-12);
 }
 
-/* ── Individual Detections ── */
+/*  Individual Detections  */
 .flow-individual-section {
     margin-top: var(--sp-12);
     border-top: 1px solid var(--glass-border);
@@ -1197,7 +1247,7 @@
     animation: authSlideUp 0.2s var(--ease-smooth);
 }
 
-/* ── Lightbox ── */
+/*  Lightbox  */
 .lightbox-overlay {
     position: fixed;
     inset: 0;
@@ -1268,7 +1318,7 @@
     transform: scale(1.1);
 }
 
-/* ── Responsive: Flow stacks vertically on mobile ── */
+/*  Responsive: Flow stacks vertically on mobile  */
 @media (max-width: 768px) {
     .analysis-flow {
         flex-direction: column;

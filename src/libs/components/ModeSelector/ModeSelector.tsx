@@ -16,7 +16,6 @@ const MODE_HINTS: Record<ScanMode, string> = {
 
 export const ModeSelector: FC<Props> = ({ mode, onModeChange }) => (
     <div className="mode-selector">
-        <label className="mode-label">Analysis Mode</label>
         <div className="mode-buttons">
             <button
                 className={`mode-btn ${mode === 'CRL' ? 'active' : ''}`}

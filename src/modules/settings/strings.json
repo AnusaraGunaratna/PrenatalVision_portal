@@ -1,0 +1,7 @@
+{
+    "settings.title": "User Settings",
+    "settings.subtitle": "Your account information",
+    "settings.label.name": "Full Name",
+    "settings.label.email": "Email Address",
+    "settings.button.logout": "Logout"
+}
