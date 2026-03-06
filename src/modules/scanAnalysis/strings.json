@@ -14,5 +14,11 @@
     "scan.table.model": "Model Variant",
     "scan.table.structure": "Structure",
     "scan.table.confidence": "Confidence Score",
-    "scan.table.measurement": "Measurement"
+    "scan.table.measurement": "Measurement",
+    "scan.quality.title": "Unacceptable Image Quality",
+    "scan.quality.detectedPrefix": "Only ",
+    "scan.quality.detectedSuffix": " anatomical structure(s) detected. A minimum of ",
+    "scan.quality.detectedEnd": " is required for a reliable analysis.",
+    "scan.quality.hint": "Please upload a clearer fetal ultrasound image with proper orientation and sufficient resolution.",
+    "scan.quality.retry": "Try Another Image"
 }
