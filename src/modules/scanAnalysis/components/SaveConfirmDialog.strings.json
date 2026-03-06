@@ -1,0 +1,8 @@
+{
+    "dialog.title": "Unsaved Scan Results",
+    "dialog.message": "You have unsaved scan results. Would you like to save before starting a new analysis?",
+    "dialog.button.save": "Save & Continue",
+    "dialog.button.saving": "Saving...",
+    "dialog.button.discard": "Discard",
+    "dialog.button.cancel": "Cancel"
+}

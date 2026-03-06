@@ -1,12 +1,13 @@
-import { FC, useEffect, useCallback } from 'react';
+import { FC, useEffect, useCallback, ReactNode } from 'react';
 
 interface Props {
     src: string;
     alt: string;
     onClose: () => void;
+    detectionOverlay?: ReactNode;
 }
 
-export const ImageLightbox: FC<Props> = ({ src, alt, onClose }) => {
+export const ImageLightbox: FC<Props> = ({ src, alt, onClose, detectionOverlay }) => {
     const handleKeyDown = useCallback((e: KeyboardEvent) => {
         if (e.key === 'Escape') onClose();
     }, [onClose]);
@@ -22,8 +23,9 @@ export const ImageLightbox: FC<Props> = ({ src, alt, onClose }) => {
 
     return (
         <div className="lightbox-overlay" onClick={onClose}>
-            <div className="lightbox-content" onClick={e => e.stopPropagation()}>
+            <div className="lightbox-content" onClick={e => e.stopPropagation()} style={{ position: "relative" }}>
                 <img src={src} alt={alt} className="lightbox-img" />
+                {detectionOverlay}
                 <span className="lightbox-caption">{alt}</span>
             </div>
             <button className="lightbox-close" onClick={onClose}>✕</button>

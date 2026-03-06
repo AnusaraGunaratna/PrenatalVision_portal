@@ -6,9 +6,7 @@ import {
   Info,
   RefreshCw,
   List,
-  LogOut,
 } from "lucide-react";
-import { useAuth } from "../../libs/context/AuthContext";
 import { useScanApi } from "../../libs/hooks/useScanApi";
 import { Button } from "../../libs/components/Button";
 import { GlassPanel } from "../../libs/components/GlassPanel";
@@ -20,6 +18,8 @@ import { LoadingPortal } from "../../libs/components/LoadingPortal";
 import { ErrorBanner } from "../../libs/components/ErrorBanner";
 import { ImageAnalysisFlow } from "./components/ImageAnalysisFlow";
 import { ModelComparisonTable } from "./components/ModelComparisonTable";
+import { SaveConfirmDialog } from "./components/SaveConfirmDialog";
+import { useSaveScan } from "./hooks/useSaveScan";
 import strings from "./strings.json";
 
 type ScanMode = "CRL" | "NT" | "AUTO";
@@ -47,15 +47,17 @@ const getFullName = (abbrev: string): string =>
 
 export const ScanAnalysisPage = () => {
   const { analyzeScan, isLoading, error, data, reset } = useScanApi();
-  const { user, logout } = useAuth();
+  const { saveScan, isSaving, isSaved, resetSaveState } = useSaveScan();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [scanMode, setScanMode] = useState<ScanMode>("CRL");
+  const [showSaveConfirm, setShowSaveConfirm] = useState(false);
 
   const handleFileSelect = (file: File) => {
     setSelectedFile(file);
     setPreview(URL.createObjectURL(file));
     reset();
+    resetSaveState();
   };
 
   const handleAnalyze = async () => {
@@ -69,9 +71,50 @@ export const ScanAnalysisPage = () => {
   };
 
   const handleReset = () => {
+    if (data && !isSaved) {
+      setShowSaveConfirm(true);
+      return;
+    }
+    forceReset();
+  };
+
+  const forceReset = () => {
     setSelectedFile(null);
     setPreview(null);
     reset();
+    resetSaveState();
+    setShowSaveConfirm(false);
+  };
+
+  const handleSave = async () => {
+    if (!data) return;
+
+    const bestModel = data.models_comparison.find(
+      (m) => m.model_name === data.best_model_name,
+    );
+    if (!bestModel) return;
+
+    try {
+      await saveScan({
+        scan_type: data.scan_type,
+        original_image_base64: data.original_image_base64,
+        enhanced_image_base64: data.enhanced_image_base64,
+        annotated_image_base64: bestModel.annotated_image_base64,
+        best_model_name: data.best_model_name,
+        best_model_measurements: data.best_model_measurements,
+        detections: bestModel.detections,
+        models_comparison: data.models_comparison.map((m) => ({
+          model_name: m.model_name,
+          detections: m.detections,
+          measurements: m.measurements,
+        })),
+        calibration_ratio: data.models_comparison[0]?.measurements?.length_mm
+          ? undefined
+          : null, 
+      });
+    } catch (err) {
+      console.error("Failed to save scan:", err);
+    }
   };
 
   const bestModel = data?.models_comparison.find(
@@ -94,41 +137,38 @@ export const ScanAnalysisPage = () => {
 
   return (
     <>
-      <header className="header">
-        <div>
-          <h1>PrenatalVision</h1>
-          <p>{strings["scan.subtitle"]}</p>
-        </div>
-        <div className="user-bar">
-          <span className="user-greeting">
-            Welcome, <strong>{user?.fullName}</strong>
-          </span>
-          <button className="logout-btn" onClick={logout}>
-            <LogOut size={14} /> Logout
-          </button>
-        </div>
-      </header>
 
       {!data && !isLoading && (
         <div className="upload-container">
-          <ModeSelector mode={scanMode} onModeChange={setScanMode} />
-
           <UploadZone onFileSelect={handleFileSelect} />
 
           {selectedFile && (
-            <GlassPanel className="preview-card anim-slide-in">
+            <div className="scan-action-bar anim-slide-in">
               {preview && (
-                <img src={preview} alt="Preview" className="preview-img" />
+                <img
+                  src={preview}
+                  alt="Preview"
+                  className="scan-action-preview"
+                />
               )}
-              <div className="preview-info">
+              <div className="scan-action-file-info">
                 <h4>{selectedFile.name}</h4>
                 <p>{(selectedFile.size / 1024).toFixed(1)} KB</p>
-                <Button onClick={handleAnalyze} disabled={isLoading}>
-                  <Activity size={20} />
-                  {strings["scan.button.analyze"]}
-                </Button>
               </div>
-            </GlassPanel>
+
+              <div className="scan-action-divider" />
+
+              <ModeSelector mode={scanMode} onModeChange={setScanMode} />
+
+              <Button
+                onClick={handleAnalyze}
+                disabled={isLoading}
+                className="analyze-btn"
+              >
+                <Activity size={20} />
+                {strings["scan.button.analyze"]}
+              </Button>
+            </div>
           )}
         </div>
       )}
@@ -273,6 +313,29 @@ export const ScanAnalysisPage = () => {
           <RefreshCw size={20} />
           New Analysis
         </button>
+      )}
+
+      {data && !isLoading && (
+        <button
+          className={`floating-save ${isSaved ? "saved" : ""}`}
+          onClick={handleSave}
+          disabled={isSaving || isSaved}
+        >
+          <ShieldCheck size={20} />
+          {isSaving ? "Saving..." : isSaved ? "Saved" : "Save Scan"}
+        </button>
+      )}
+
+      {showSaveConfirm && (
+        <SaveConfirmDialog
+          isSaving={isSaving}
+          onSaveAndContinue={async () => {
+            await handleSave();
+            forceReset();
+          }}
+          onDiscard={forceReset}
+          onCancel={() => setShowSaveConfirm(false)}
+        />
       )}
     </>
   );

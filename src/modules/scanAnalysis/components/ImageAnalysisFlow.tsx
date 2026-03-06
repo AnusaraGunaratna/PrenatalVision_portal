@@ -1,4 +1,4 @@
-import { FC, useState, useRef, useEffect } from "react";
+import { FC, useState, useEffect } from "react";
 import { ArrowRight, Eye, EyeOff, ZoomIn } from "lucide-react";
 import { GlassPanel } from "../../../libs/components/GlassPanel";
 import { ImageLightbox } from "./ImageLightbox";
@@ -17,9 +17,10 @@ interface Props {
   detections: Detection[];
 }
 
-interface IndividualImage {
+interface ActiveDetection {
   class_name: string;
-  dataUrl: string;
+  confidence: number;
+  bbox: number[];
 }
 
 const STRUCTURE_NAMES: Record<string, string> = {
@@ -68,68 +69,67 @@ export const ImageAnalysisFlow: FC<Props> = ({
   originalBase64,
   enhancedBase64,
   annotatedBase64,
-  bestModelName,
   detections,
 }) => {
   const [lightboxSrc, setLightboxSrc] = useState<string | null>(null);
   const [lightboxAlt, setLightboxAlt] = useState("");
+  const [lightboxDetection, setLightboxDetection] = useState<ActiveDetection | null>(null);
   const [showIndividual, setShowIndividual] = useState(false);
-  const [individualImages, setIndividualImages] = useState<IndividualImage[]>(
-    [],
-  );
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [imgDims, setImgDims] = useState<{ w: number; h: number }>({ w: 0, h: 0 });
 
   const images = [originalBase64, enhancedBase64, annotatedBase64];
 
-  const openLightbox = (src: string, alt: string) => {
+  const openLightbox = (src: string, alt: string, detection?: ActiveDetection) => {
     setLightboxSrc(src);
     setLightboxAlt(alt);
+    setLightboxDetection(detection || null);
   };
 
   useEffect(() => {
-    if (!showIndividual || detections.length === 0) return;
-    if (individualImages.length > 0) return;
-
+    if (!enhancedBase64) return;
     const img = new Image();
     img.onload = () => {
-      const canvas = canvasRef.current;
-      if (!canvas) return;
-      const ctx = canvas.getContext("2d");
-      if (!ctx) return;
-
-      const results: IndividualImage[] = [];
-
-      for (const det of detections) {
-        canvas.width = img.width;
-        canvas.height = img.height;
-        ctx.clearRect(0, 0, img.width, img.height);
-        ctx.drawImage(img, 0, 0);
-
-        const [x1, y1, x2, y2] = det.bbox;
-        const color = DETECTION_COLORS[det.class_name] || "#00FF00";
-
-        ctx.strokeStyle = color;
-        ctx.lineWidth = 3;
-        ctx.strokeRect(x1, y1, x2 - x1, y2 - y1);
-
-        const label = `${det.class_name} ${(det.confidence * 100).toFixed(0)}%`;
-        ctx.font = "bold 14px sans-serif";
-        const tm = ctx.measureText(label);
-        const labelH = 22;
-        ctx.fillStyle = color;
-        ctx.fillRect(x1, y1 - labelH - 2, tm.width + 8, labelH);
-        ctx.fillStyle = "#FFFFFF";
-        ctx.fillText(label, x1 + 4, y1 - 6);
-
-        results.push({
-          class_name: det.class_name,
-          dataUrl: canvas.toDataURL("image/png"),
-        });
-      }
-      setIndividualImages(results);
+      setImgDims({ w: img.width, h: img.height });
     };
     img.src = enhancedBase64;
-  }, [showIndividual, detections, enhancedBase64, individualImages.length]);
+  }, [enhancedBase64]);
+
+  const renderDetectionBox = (det: ActiveDetection, isThumbnail: boolean) => {
+    if (!imgDims.w || !imgDims.h) return null;
+    const [x1, y1, x2, y2] = det.bbox;
+    const color = DETECTION_COLORS[det.class_name] || "#00FF00";
+
+    return (
+      <div
+        style={{
+          position: "absolute",
+          left: `${(x1 / imgDims.w) * 100}%`,
+          top: `${(y1 / imgDims.h) * 100}%`,
+          width: `${((x2 - x1) / imgDims.w) * 100}%`,
+          height: `${((y2 - y1) / imgDims.h) * 100}%`,
+          border: `${isThumbnail ? 2 : 4}px solid ${color}`,
+          pointerEvents: "none",
+          zIndex: 10,
+        }}
+      >
+        <div
+          style={{
+            position: "absolute",
+            top: isThumbnail ? "-20px" : "-28px",
+            left: isThumbnail ? "-2px" : "-4px",
+            background: color,
+            color: "#FFF",
+            padding: isThumbnail ? "2px 4px" : "4px 8px",
+            fontSize: isThumbnail ? "10px" : "14px",
+            fontWeight: "bold",
+            whiteSpace: "nowrap",
+          }}
+        >
+          {det.class_name} {(det.confidence * 100).toFixed(0)}%
+        </div>
+      </div>
+    );
+  };
 
   return (
     <>
@@ -178,24 +178,26 @@ export const ImageAnalysisFlow: FC<Props> = ({
                 : `Show Individual Detections (${detections.length})`}
             </button>
 
-            {showIndividual && individualImages.length > 0 && (
+            {showIndividual && detections.length > 0 && (
               <div className="flow-gallery anim-slide-down">
-                {individualImages.map((item, idx) => (
+                {detections.map((det, idx) => (
                   <div
                     key={idx}
                     className="flow-gallery-item"
                     onClick={() =>
                       openLightbox(
-                        item.dataUrl,
-                        `${item.class_name} — ${STRUCTURE_NAMES[item.class_name] || item.class_name}`,
+                        enhancedBase64,
+                        `${det.class_name} — ${STRUCTURE_NAMES[det.class_name] || det.class_name}`,
+                        det
                       )
                     }
                   >
-                    <div className="flow-gallery-img">
-                      <img src={item.dataUrl} alt={item.class_name} />
+                    <div className="flow-gallery-img" style={{ position: "relative" }}>
+                      <img src={enhancedBase64} alt={det.class_name} />
+                      {renderDetectionBox(det, true)}
                     </div>
                     <div className="flow-gallery-info">
-                      <strong>{item.class_name}</strong>
+                      <strong>{det.class_name}</strong>
                     </div>
                   </div>
                 ))}
@@ -205,13 +207,15 @@ export const ImageAnalysisFlow: FC<Props> = ({
         )}
       </GlassPanel>
 
-      <canvas ref={canvasRef} style={{ display: "none" }} />
-
       {lightboxSrc && (
         <ImageLightbox
           src={lightboxSrc}
           alt={lightboxAlt}
-          onClose={() => setLightboxSrc(null)}
+          onClose={() => {
+            setLightboxSrc(null);
+            setLightboxDetection(null);
+          }}
+          detectionOverlay={lightboxDetection ? renderDetectionBox(lightboxDetection, false) : undefined}
         />
       )}
     </>
