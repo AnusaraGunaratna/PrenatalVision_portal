@@ -28,6 +28,7 @@ export interface BiometricMeasurement {
     HC_mm?: number;
     circumference_mm?: number;
     confidence?: number;
+    approximate?: boolean;
 }
 
 export const useScanApi = () => {
