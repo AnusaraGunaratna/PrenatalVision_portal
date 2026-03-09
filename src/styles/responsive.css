@@ -27,6 +27,39 @@
         padding: var(--sp-6) var(--sp-9);
     }
 
+    .fab {
+        right: var(--sp-8);
+    }
+
+    .fab--sm {
+        padding: var(--sp-3) 0;
+        font-size: var(--fs-xs);
+        min-width: 120px;
+    }
+
+    .fab--md {
+        padding: var(--sp-5) 0;
+        font-size: var(--fs-base);
+        min-width: 150px;
+    }
+
+    .fab--lg {
+        padding: var(--sp-6) 0;
+        font-size: var(--fs-md);
+        min-width: 180px;
+    }
+
+    .fab-pos-1 { bottom: var(--sp-8); }
+    .fab-pos-2 { bottom: calc(var(--sp-8) + 42px + var(--sp-5)); }
+    .fab-pos-3 { bottom: calc(var(--sp-8) + 84px + var(--sp-8)); }
+
+    .abbrev-side-panel {
+        right: var(--sp-8);
+        width: 300px;
+        max-height: 50vh;
+        bottom: calc(var(--sp-8) + 126px + var(--sp-10));
+    }
+
     .preview-card {
         flex-direction: column;
         text-align: center;

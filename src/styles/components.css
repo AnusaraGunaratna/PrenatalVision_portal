@@ -334,6 +334,8 @@
 
 .scan-action-file-info {
     text-align: center;
+    max-width: 100%;
+    overflow: hidden;
 }
 
 .scan-action-file-info h4 {
@@ -341,6 +343,10 @@
     font-weight: var(--fw-semibold);
     color: var(--text-main);
     margin-bottom: var(--sp-1);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 300px;
 }
 
 .scan-action-file-info p {
@@ -1051,53 +1057,211 @@
     min-width: 160px;
 }
 
-/*  Floating Reset  */
-.floating-reset {
+/*  Floating Action Button (universal)  */
+.fab {
     position: fixed;
-    bottom: var(--sp-12);
     right: var(--sp-12);
-    padding: var(--sp-7) var(--sp-10);
-    border-radius: var(--radius-full);
-    font-size: var(--fs-md);
-    font-weight: var(--fw-medium);
-    font-family: inherit;
-    cursor: pointer;
-    background: var(--glass);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid var(--glass-border);
-    color: var(--text-main);
     display: flex;
     align-items: center;
     gap: var(--sp-4);
+    border-radius: var(--radius-full);
+    font-weight: var(--fw-semibold);
+    font-family: inherit;
+    cursor: pointer;
+    border: 1px solid var(--glass-border);
+    color: var(--text-main);
     transition: all var(--duration-normal) ease;
+    box-shadow: var(--shadow-float);
+    z-index: var(--z-float);
+    white-space: nowrap;
+}
+
+/*  FAB sizes (fixed width per size so all buttons match)  */
+.fab--sm {
+    padding: var(--sp-4) 0;
+    font-size: var(--fs-sm);
+    gap: var(--sp-3);
+    min-width: 140px;
+    justify-content: center;
+}
+
+.fab--md {
+    padding: var(--sp-6) 0;
+    font-size: var(--fs-md);
+    gap: var(--sp-4);
+    min-width: 175px;
+    justify-content: center;
+}
+
+.fab--lg {
+    padding: var(--sp-8) 0;
+    font-size: var(--fs-lg);
+    gap: var(--sp-5);
+    min-width: 210px;
+    justify-content: center;
+}
+
+.fab:hover:not(:disabled) {
+    transform: translateY(-2px);
+}
+
+.fab:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+/*  FAB — default (glass)  */
+.fab--default {
+    background: var(--glass);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+.fab--default:hover:not(:disabled) {
+    background: var(--danger);
+    border-color: var(--danger);
+    box-shadow: var(--shadow-danger);
+}
+
+/*  FAB — save (green)  */
+.fab--save {
+    background: var(--success);
+    color: white;
+    border-color: var(--success);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+}
+
+.fab--save:hover:not(:disabled) {
+    box-shadow: 0 8px 24px rgba(16, 185, 129, 0.5);
+}
+
+.fab--save.fab--active {
+    background: var(--glass);
+    color: var(--success);
+    border: 1px solid var(--success-border);
+    box-shadow: none;
+    cursor: default;
+}
+
+/*  FAB — success (primary)  */
+.fab--success {
+    background: var(--primary-subtle);
+    border-color: var(--primary-border);
+    color: var(--text-main);
+}
+
+.fab--success:hover:not(:disabled) {
+    background: var(--primary);
+    border-color: var(--primary);
+    box-shadow: var(--shadow-btn-hover);
+}
+
+/*  FAB stacking positions (with spacing between buttons)  */
+.fab-pos-1 { bottom: var(--sp-12); }
+.fab-pos-2 { bottom: calc(var(--sp-12) + 48px + var(--sp-6)); }
+.fab-pos-3 { bottom: calc(var(--sp-12) + 96px + var(--sp-10)); }
+
+/*  Abbreviations Side Panel (right-anchored, non-blocking)  */
+.abbrev-side-panel {
+    position: fixed;
+    right: var(--sp-12);
+    bottom: calc(var(--sp-12) + 144px + var(--sp-14));
+    width: 380px;
+    max-height: 55vh;
+    background: rgba(15, 23, 42, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-xl);
+    display: flex;
+    flex-direction: column;
     box-shadow: var(--shadow-float);
     z-index: var(--z-float);
 }
 
-.floating-reset:hover {
-    background: var(--danger);
-    border-color: var(--danger);
-    box-shadow: var(--shadow-danger);
-    transform: translateY(-2px);
-}
-
-/*  System Info Footer  */
-.system-info-footer {
-    display: flex;
-    justify-content: center;
-    padding-top: var(--sp-10);
-    border-top: 1px solid var(--glass-border);
-    margin-top: var(--sp-8);
-}
-
-.system-tag {
+.abbrev-header {
     display: flex;
     align-items: center;
-    gap: var(--sp-4);
+    justify-content: space-between;
+    padding: var(--sp-7) var(--sp-9);
+    border-bottom: 1px solid var(--glass-border);
+    flex-shrink: 0;
+}
+
+.abbrev-header h3 {
+    font-size: var(--fs-lg);
+    font-weight: var(--fw-semibold);
+    color: var(--text-main);
+    margin: 0;
+}
+
+.abbrev-close-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: var(--radius-md);
+    background: transparent;
+    border: 1px solid var(--glass-border);
     color: var(--text-muted);
+    cursor: pointer;
+    transition: all var(--duration-fast) ease;
+    flex-shrink: 0;
+}
+
+.abbrev-close-btn:hover {
+    background: var(--danger);
+    border-color: var(--danger);
+    color: white;
+}
+
+.abbrev-body {
+    overflow-y: auto;
+    padding: var(--sp-5) var(--sp-8) var(--sp-8);
+}
+
+.abbrev-table-header {
+    display: grid;
+    grid-template-columns: 72px 1fr;
+    gap: var(--sp-6);
+    padding: var(--sp-5) var(--sp-6);
     font-size: var(--fs-sm);
-    font-family: monospace;
+    font-weight: var(--fw-semibold);
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid var(--glass-border);
+}
+
+.abbrev-table-body {
+    display: flex;
+    flex-direction: column;
+}
+
+.abbrev-row {
+    display: grid;
+    grid-template-columns: 72px 1fr;
+    gap: var(--sp-6);
+    padding: var(--sp-5) var(--sp-6);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    transition: background var(--duration-fast) ease;
+}
+
+.abbrev-row:hover {
+    background: var(--glass-hover);
+}
+
+.abbrev-code {
+    font-family: var(--font-mono);
+    font-size: var(--fs-base);
+    font-weight: var(--fw-semibold);
+    color: var(--primary);
+}
+
+.abbrev-name {
+    font-size: var(--fs-md);
+    color: var(--text-main);
 }
 
 /*  Structure Chips  */

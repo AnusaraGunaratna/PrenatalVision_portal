@@ -1,11 +1,13 @@
-import { FC } from "react";
+import { FC, useState, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { ArrowLeft, Ruler, List } from "lucide-react";
+import { ArrowLeft, Ruler, List, BookOpen } from "lucide-react";
 import { useSavedScanDetail } from "./hooks/useSavedScans";
 import { GlassPanel } from "../../libs/components/GlassPanel";
 import { Badge } from "../../libs/components/Badge";
 import { LoadingPortal } from "../../libs/components/LoadingPortal";
 import { ErrorBanner } from "../../libs/components/ErrorBanner";
+import { FloatingActionButton } from "../../libs/components/FloatingActionButton";
+import { AbbreviationsPanel } from "../../libs/components/AbbreviationsPanel";
 import { ImageAnalysisFlow } from "../scanAnalysis/components/ImageAnalysisFlow";
 import { ModelComparisonTable } from "../scanAnalysis/components/ModelComparisonTable";
 import strings from "./strings.json";
@@ -35,6 +37,15 @@ export const SavedScanDetailPage: FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { data, isLoading, error } = useSavedScanDetail(id);
+  const [showAbbreviations, setShowAbbreviations] = useState(false);
+
+  const toggleAbbreviations = useCallback(() => {
+    setShowAbbreviations((prev) => !prev);
+  }, []);
+
+  const closeAbbreviations = useCallback(() => {
+    setShowAbbreviations(false);
+  }, []);
 
   if (isLoading) return <LoadingPortal />;
   if (error) return <ErrorBanner message={error} />;
@@ -173,6 +184,22 @@ export const SavedScanDetailPage: FC = () => {
           bestModelName={data.best_model_name}
         />
       )}
+
+      <FloatingActionButton
+        variant="success"
+        size="md"
+        className="fab-pos-1"
+        onClick={toggleAbbreviations}
+      >
+        <BookOpen size={16} />
+        Abbreviations
+      </FloatingActionButton>
+
+      <AbbreviationsPanel
+        structures={STRUCTURE_NAMES}
+        isOpen={showAbbreviations}
+        onClose={closeAbbreviations}
+      />
     </div>
   );
 };
