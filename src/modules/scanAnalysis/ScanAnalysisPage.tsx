@@ -118,6 +118,10 @@ export const ScanAnalysisPage = () => {
           detections: m.detections,
           measurements: m.measurements,
         })),
+        additional_detections: data.additional_detections || [],
+        additional_measurements: data.additional_measurements || {},
+        additional_annotated_image_base64:
+          data.additional_annotated_image_base64 || "",
         calibration_ratio: data.models_comparison[0]?.measurements?.length_mm
           ? undefined
           : null,
@@ -131,6 +135,8 @@ export const ScanAnalysisPage = () => {
     (m) => m.model_name === data.best_model_name,
   );
   const bestAnnotatedImage = bestModel?.annotated_image_base64 || "";
+  const combinedAnnotatedImage =
+    data?.additional_annotated_image_base64 || bestAnnotatedImage;
 
   const allStructures = data
     ? [
@@ -320,13 +326,14 @@ export const ScanAnalysisPage = () => {
           </GlassPanel>
 
           {/* Image Analysis Pipeline */}
-          {bestAnnotatedImage && (
+          {combinedAnnotatedImage && (
             <ImageAnalysisFlow
               originalBase64={data.original_image_base64}
               enhancedBase64={data.enhanced_image_base64}
-              annotatedBase64={bestAnnotatedImage}
+              annotatedBase64={combinedAnnotatedImage}
               bestModelName={data.best_model_name}
               detections={bestModel?.detections || []}
+              additionalDetections={data.additional_detections || []}
             />
           )}
 

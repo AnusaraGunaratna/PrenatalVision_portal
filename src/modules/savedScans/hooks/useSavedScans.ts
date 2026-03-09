@@ -34,6 +34,14 @@ export interface SavedScanDetailData {
         }>;
     }>;
     calibration_ratio: number;
+    additional_detections?: Array<{
+        class_name: string;
+        confidence: number;
+        bbox: number[];
+        source_model: string;
+    }>;
+    additional_measurements?: Record<string, Record<string, unknown>>;
+    additional_annotated_image_url?: string;
     created_at: string;
 }
 

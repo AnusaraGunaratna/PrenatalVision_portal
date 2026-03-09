@@ -9,6 +9,16 @@ export interface ScanResponse {
     models_comparison: ModelResult[];
     best_model_name: string;
     best_model_measurements: Record<string, BiometricMeasurement>;
+    additional_detections: AdditionalDetection[];
+    additional_measurements: Record<string, BiometricMeasurement>;
+    additional_annotated_image_base64: string;
+}
+
+export interface AdditionalDetection {
+    class_name: string;
+    confidence: number;
+    bbox: number[];
+    source_model: string;
 }
 
 export interface ModelResult {

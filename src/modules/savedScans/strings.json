@@ -15,5 +15,7 @@
     "savedScans.detail.structures": "Detected Structures",
     "savedScans.detail.modelComparison": "Model Comparison",
     "savedScans.detail.noMeasurements": "No biometric measurements available.",
-    "savedScans.error.loading": "Failed to load saved scans"
+    "savedScans.error.loading": "Failed to load saved scans",
+    "savedScans.additional.title": "Additional Structures",
+    "savedScans.additional.subtitle": "Detected by supporting models only"
 }
