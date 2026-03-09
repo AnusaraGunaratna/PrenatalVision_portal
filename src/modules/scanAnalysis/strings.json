@@ -20,10 +20,5 @@
     "scan.quality.detectedSuffix": " anatomical structure(s) detected. A minimum of ",
     "scan.quality.detectedEnd": " is required for a reliable analysis.",
     "scan.quality.hint": "Please upload a clearer fetal ultrasound image with proper orientation and sufficient resolution.",
-    "scan.quality.retry": "Try Another Image",
-    "scan.additional.title": "Additional Structures",
-    "scan.additional.subtitle": "Detected by supporting models only",
-    "scan.additional.col.structure": "Structure",
-    "scan.additional.col.confidence": "Confidence",
-    "scan.additional.col.source": "Source Model"
+    "scan.quality.retry": "Try Another Image"
 }

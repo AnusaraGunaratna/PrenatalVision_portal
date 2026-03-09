@@ -5,12 +5,10 @@ import { GlassPanel } from "../../../libs/components/GlassPanel";
 
 interface Props {
   modelsComparison: ModelResult[];
-  bestModelName: string;
 }
 
 export const ModelComparisonTable: FC<Props> = ({
   modelsComparison,
-  bestModelName,
 }) => {
   const [showAnalytics, setShowAnalytics] = useState(false);
 
@@ -19,7 +17,7 @@ export const ModelComparisonTable: FC<Props> = ({
   // Building a structure comparison map: structure -> { modelName -> confidence }
   const structureMap: Record<string, Record<string, number>> = {};
   modelsComparison.forEach((model) => {
-    model.detections.forEach((det) => {
+    (model.detections ?? []).forEach((det) => {
       const name = det.class_name;
       if (!structureMap[name]) structureMap[name] = {};
       const existing = structureMap[name][model.model_name];

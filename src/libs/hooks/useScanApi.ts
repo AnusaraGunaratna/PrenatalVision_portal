@@ -1,29 +1,29 @@
 import { useState, useCallback } from 'react';
 import apiClient from '../services/api.client';
 
-export interface ScanResponse {
-    scan_id: string;
-    scan_type: string;
-    original_image_base64: string;
-    enhanced_image_base64: string;
-    models_comparison: ModelResult[];
-    best_model_name: string;
-    best_model_measurements: Record<string, BiometricMeasurement>;
-    additional_detections: AdditionalDetection[];
-    additional_measurements: Record<string, BiometricMeasurement>;
-    additional_annotated_image_base64: string;
-}
-
-export interface AdditionalDetection {
+export interface Detection {
     class_name: string;
     confidence: number;
     bbox: number[];
     source_model: string;
 }
 
+export interface ScanResponse {
+    scan_id: string;
+    scan_type: string;
+    original_image_base64: string;
+    enhanced_image_base64: string;
+    detections: Detection[];
+    measurements: Record<string, BiometricMeasurement>;
+    annotated_image_base64: string;
+    models_comparison: ModelResult[];
+    calibration_ratio: number;
+    processed_at: string;
+}
+
 export interface ModelResult {
     model_name: string;
-    detections: any[];
+    detections: Detection[];
     measurements: Record<string, BiometricMeasurement>;
     annotated_image_base64: string;
 }

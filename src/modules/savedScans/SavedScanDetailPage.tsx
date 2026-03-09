@@ -60,7 +60,7 @@ export const SavedScanDetailPage: FC = () => {
   });
 
   const measurements = data.measurements || {};
-  const allStructures = [...new Set(data.detections.map((d) => d.class_name))];
+  const allStructures = [...new Set((data.detections ?? []).map((d) => d.class_name))];
 
   return (
     <div className="saved-detail-container">
@@ -84,7 +84,7 @@ export const SavedScanDetailPage: FC = () => {
             {data.scan_type.toUpperCase()}
           </Badge>
           <span className="badge badge-nt">
-            {data.detections.length} Detections
+            {data.detections?.length ?? 0} Detections
           </span>
         </div>
       </div>
@@ -94,12 +94,8 @@ export const SavedScanDetailPage: FC = () => {
         <ImageAnalysisFlow
           originalBase64={data.original_image_url}
           enhancedBase64={data.enhanced_image_url}
-          annotatedBase64={
-            data.additional_annotated_image_url || data.annotated_image_url
-          }
-          bestModelName={data.best_model_name}
-          detections={data.detections}
-          additionalDetections={data.additional_detections || []}
+          annotatedBase64={data.annotated_image_url}
+          detections={data.detections ?? []}
         />
       )}
 
@@ -169,9 +165,9 @@ export const SavedScanDetailPage: FC = () => {
       )}
 
       {/* Model Comparison */}
-      {data.models_comparison.length > 0 && (
+      {(data.models_comparison ?? []).length > 0 && (
         <ModelComparisonTable
-          modelsComparison={data.models_comparison.map((m) => ({
+          modelsComparison={(data.models_comparison ?? []).map((m) => ({
             model_name: m.modelName,
             detections: m.detections,
             measurements: m.measurements,
@@ -184,7 +180,6 @@ export const SavedScanDetailPage: FC = () => {
             },
             annotated_image_base64: "",
           }))}
-          bestModelName={data.best_model_name}
         />
       )}
 
