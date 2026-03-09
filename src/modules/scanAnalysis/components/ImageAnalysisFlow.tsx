@@ -9,12 +9,20 @@ interface Detection {
   bbox: number[];
 }
 
+interface AdditionalDetection {
+  class_name: string;
+  confidence: number;
+  bbox: number[];
+  source_model: string;
+}
+
 interface Props {
   originalBase64: string;
   enhancedBase64: string;
   annotatedBase64: string;
   bestModelName: string;
   detections: Detection[];
+  additionalDetections?: AdditionalDetection[];
 }
 
 interface ActiveDetection {
@@ -101,7 +109,17 @@ export const ImageAnalysisFlow: FC<Props> = ({
   enhancedBase64,
   annotatedBase64,
   detections,
+  additionalDetections = [],
 }) => {
+  const allDetections: Detection[] = [
+    ...detections,
+    ...additionalDetections.map((d) => ({
+      class_name: d.class_name,
+      confidence: d.confidence,
+      bbox: d.bbox,
+    })),
+  ];
+
   const [lightboxSrc, setLightboxSrc] = useState<string | null>(null);
   const [lightboxAlt, setLightboxAlt] = useState("");
   const [lightboxDetection, setLightboxDetection] =
@@ -204,7 +222,6 @@ export const ImageAnalysisFlow: FC<Props> = ({
           <h2>
             <ZoomIn size={20} /> Analysis Pipeline
           </h2>
-          <p>Fetal structures detected using Enhanced YOLO11 architecture</p>
         </div>
 
         <div className="analysis-flow">
@@ -232,7 +249,7 @@ export const ImageAnalysisFlow: FC<Props> = ({
           ))}
         </div>
 
-        {detections.length > 0 && (
+        {allDetections.length > 0 && (
           <div className="flow-individual-section">
             <button
               className="flow-individual-toggle"
@@ -241,12 +258,12 @@ export const ImageAnalysisFlow: FC<Props> = ({
               {showIndividual ? <EyeOff size={16} /> : <Eye size={16} />}
               {showIndividual
                 ? "Hide Individual Detections"
-                : `Show Individual Detections (${detections.length})`}
+                : `Show Individual Detections (${allDetections.length})`}
             </button>
 
-            {showIndividual && detections.length > 0 && (
+            {showIndividual && allDetections.length > 0 && (
               <div className="flow-gallery anim-slide-down">
-                {detections.map((det, idx) => (
+                {allDetections.map((det, idx) => (
                   <DetectionThumbnail
                     key={idx}
                     det={det}

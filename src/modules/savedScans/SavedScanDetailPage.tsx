@@ -94,9 +94,12 @@ export const SavedScanDetailPage: FC = () => {
         <ImageAnalysisFlow
           originalBase64={data.original_image_url}
           enhancedBase64={data.enhanced_image_url}
-          annotatedBase64={data.annotated_image_url}
+          annotatedBase64={
+            data.additional_annotated_image_url || data.annotated_image_url
+          }
           bestModelName={data.best_model_name}
           detections={data.detections}
+          additionalDetections={data.additional_detections || []}
         />
       )}
 
