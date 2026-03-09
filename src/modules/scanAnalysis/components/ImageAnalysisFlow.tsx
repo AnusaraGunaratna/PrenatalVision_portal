@@ -104,13 +104,21 @@ export const ImageAnalysisFlow: FC<Props> = ({
 }) => {
   const [lightboxSrc, setLightboxSrc] = useState<string | null>(null);
   const [lightboxAlt, setLightboxAlt] = useState("");
-  const [lightboxDetection, setLightboxDetection] = useState<ActiveDetection | null>(null);
+  const [lightboxDetection, setLightboxDetection] =
+    useState<ActiveDetection | null>(null);
   const [showIndividual, setShowIndividual] = useState(false);
-  const [imgDims, setImgDims] = useState<{ w: number; h: number }>({ w: 0, h: 0 });
+  const [imgDims, setImgDims] = useState<{ w: number; h: number }>({
+    w: 0,
+    h: 0,
+  });
 
   const images = [originalBase64, enhancedBase64, annotatedBase64];
 
-  const openLightbox = (src: string, alt: string, detection?: ActiveDetection) => {
+  const openLightbox = (
+    src: string,
+    alt: string,
+    detection?: ActiveDetection,
+  ) => {
     setLightboxSrc(src);
     setLightboxAlt(alt);
     setLightboxDetection(detection || null);
@@ -136,7 +144,7 @@ export const ImageAnalysisFlow: FC<Props> = ({
 
     let offsetLeft = 0;
     let offsetTop = 0;
-    let visibleW = 100;  
+    let visibleW = 100;
     let visibleH = 100;
 
     if (isThumbnail && containerEl) {
@@ -248,7 +256,7 @@ export const ImageAnalysisFlow: FC<Props> = ({
                       openLightbox(
                         enhancedBase64,
                         `${det.class_name} — ${STRUCTURE_NAMES[det.class_name] || det.class_name}`,
-                        det
+                        det,
                       )
                     }
                   />
@@ -267,7 +275,11 @@ export const ImageAnalysisFlow: FC<Props> = ({
             setLightboxSrc(null);
             setLightboxDetection(null);
           }}
-          detectionOverlay={lightboxDetection ? renderDetectionBox(lightboxDetection, false) : undefined}
+          detectionOverlay={
+            lightboxDetection
+              ? renderDetectionBox(lightboxDetection, false)
+              : undefined
+          }
         />
       )}
     </>

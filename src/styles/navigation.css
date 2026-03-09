@@ -17,7 +17,16 @@
 
 .nav-brand {
     display: flex;
+    align-items: center;
+    gap: var(--sp-2);
     justify-content: flex-start;
+}
+
+.nav-brand-logo {
+    width: 72px;
+    height: 72px;
+    object-fit: contain;
+    flex-shrink: 0;
 }
 
 .nav-brand .nav-logo {
@@ -63,7 +72,7 @@
     box-shadow: var(--shadow-btn);
 }
 
-.nav-user {
+.nav-right {
     display: flex;
     align-items: center;
     justify-content: flex-end;
@@ -76,22 +85,94 @@
     font-weight: var(--fw-medium);
 }
 
-/* Responsive */
+/* Hamburger button — hidden on desktop */
+.nav-hamburger {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md);
+    color: var(--text-main);
+    padding: var(--sp-4);
+    cursor: pointer;
+    transition: background var(--duration-fast) var(--ease-smooth);
+}
+
+.nav-hamburger:hover {
+    background: var(--glass-hover);
+}
+
+/* Mobile menu — hidden on desktop */
+.nav-mobile-menu {
+    display: none;
+}
+
+.nav-mobile-link {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-6);
+    padding: var(--sp-8) var(--sp-10);
+    border-radius: var(--radius-md);
+    font-size: var(--fs-lg);
+    font-weight: var(--fw-medium);
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: all var(--duration-fast) var(--ease-smooth);
+}
+
+.nav-mobile-link:hover {
+    color: var(--text-main);
+    background: var(--glass-hover);
+}
+
+.nav-mobile-link-active {
+    color: white;
+    background: var(--primary);
+    box-shadow: var(--shadow-btn);
+}
+
+/* ── Responsive ── */
 @media (max-width: 768px) {
     .nav-bar {
+        display: flex;
         flex-wrap: wrap;
-        gap: var(--sp-6);
-        justify-content: center;
+        justify-content: space-between;
+        align-items: center;
+        padding: var(--sp-6) var(--sp-8);
     }
 
+    .nav-brand {
+        gap: var(--sp-2);
+    }
+
+    .nav-brand-logo {
+        width: 38px;
+        height: 38px;
+    }
+
+    .nav-brand .nav-logo {
+        font-size: var(--fs-2xl);
+    }
+
+    /* Hide desktop nav links */
     .nav-links {
-        order: 3;
-        width: 100%;
-        justify-content: center;
+        display: none;
     }
 
-    .nav-link {
-        font-size: var(--fs-sm);
-        padding: var(--sp-4) var(--sp-6);
+    /* Show hamburger */
+    .nav-hamburger {
+        display: flex;
+    }
+
+    /* Mobile dropdown menu */
+    .nav-mobile-menu {
+        display: flex;
+        flex-direction: column;
+        gap: var(--sp-2);
+        width: 100%;
+        padding-top: var(--sp-6);
+        border-top: 1px solid var(--glass-border);
+        margin-top: var(--sp-6);
     }
 }

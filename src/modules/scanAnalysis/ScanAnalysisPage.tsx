@@ -1,11 +1,10 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import {
   Activity,
   ShieldCheck,
   Ruler,
-  Info,
   RefreshCw,
-  List,
+  BookOpen,
   AlertTriangle,
 } from "lucide-react";
 import { useScanApi } from "../../libs/hooks/useScanApi";
@@ -17,6 +16,8 @@ import { UploadZone } from "../../libs/components/UploadZone";
 import { ModeSelector } from "../../libs/components/ModeSelector";
 import { LoadingPortal } from "../../libs/components/LoadingPortal";
 import { ErrorBanner } from "../../libs/components/ErrorBanner";
+import { FloatingActionButton } from "../../libs/components/FloatingActionButton";
+import { AbbreviationsPanel } from "../../libs/components/AbbreviationsPanel";
 import { ImageAnalysisFlow } from "./components/ImageAnalysisFlow";
 import { ModelComparisonTable } from "./components/ModelComparisonTable";
 import { SaveConfirmDialog } from "./components/SaveConfirmDialog";
@@ -53,6 +54,15 @@ export const ScanAnalysisPage = () => {
   const [preview, setPreview] = useState<string | null>(null);
   const [scanMode, setScanMode] = useState<ScanMode>("CRL");
   const [showSaveConfirm, setShowSaveConfirm] = useState(false);
+  const [showAbbreviations, setShowAbbreviations] = useState(false);
+
+  const toggleAbbreviations = useCallback(() => {
+    setShowAbbreviations((prev) => !prev);
+  }, []);
+
+  const closeAbbreviations = useCallback(() => {
+    setShowAbbreviations(false);
+  }, []);
 
   const handleFileSelect = (file: File) => {
     setSelectedFile(file);
@@ -155,7 +165,7 @@ export const ScanAnalysisPage = () => {
                 />
               )}
               <div className="scan-action-file-info">
-                <h4>{selectedFile.name}</h4>
+                <h4 title={selectedFile.name}>{selectedFile.name}</h4>
                 <p>{(selectedFile.size / 1024).toFixed(1)} KB</p>
               </div>
 
@@ -216,10 +226,7 @@ export const ScanAnalysisPage = () => {
                   </Badge>
                 </div>
                 <div className="metrics-grid">
-                  <MetricItem
-                    value={allStructures.length}
-                    label="Unique Structures"
-                  />
+                  <MetricItem value={allStructures.length} label="Structures" />
                   <MetricItem
                     value={bestModel?.detections.length ?? 0}
                     label="Detections"
@@ -235,26 +242,44 @@ export const ScanAnalysisPage = () => {
                 </h2>
                 <div className="measurements-list">
                   {(() => {
-                    const rows: { label: string; value: string; approx?: boolean }[] = [];
+                    const rows: {
+                      label: string;
+                      value: string;
+                      approx?: boolean;
+                    }[] = [];
 
                     Object.entries(measurements).forEach(([key, m]) => {
                       if (key === "Head") {
                         if (m.BPD_mm)
-                          rows.push({ label: "Biparietal Diameter", value: `${m.BPD_mm} mm` });
+                          rows.push({
+                            label: "Biparietal Diameter",
+                            value: `${m.BPD_mm} mm`,
+                          });
                         if (m.HC_mm)
-                          rows.push({ label: "Head Circumference", value: `${m.HC_mm} mm` });
+                          rows.push({
+                            label: "Head Circumference",
+                            value: `${m.HC_mm} mm`,
+                          });
                       } else if (key === "Abdomen") {
                         if (m.circumference_mm)
-                          rows.push({ label: "Abdominal Circumference", value: `${m.circumference_mm} mm` });
+                          rows.push({
+                            label: "Abdominal Circumference",
+                            value: `${m.circumference_mm} mm`,
+                          });
                       } else {
                         let val = "";
                         if (m.thickness_mm) val = `${m.thickness_mm} mm`;
                         else if (m.length_mm) val = `${m.length_mm} mm`;
                         if (val) {
-                          const displayName = key === "NT"
-                            ? `${getFullName(key)} (NT)`
-                            : getFullName(key);
-                          rows.push({ label: displayName, value: val, approx: m.approximate });
+                          const displayName =
+                            key === "NT"
+                              ? `${getFullName(key)} (NT)`
+                              : getFullName(key);
+                          rows.push({
+                            label: displayName,
+                            value: val,
+                            approx: m.approximate,
+                          });
                         }
                       }
                     });
@@ -268,7 +293,10 @@ export const ScanAnalysisPage = () => {
                           <div className="m-value">
                             {r.value}
                             {r.approx && (
-                              <span className="m-approx" title="Estimated from bounding box, not caliper-based">
+                              <span
+                                className="m-approx"
+                                title="Estimated from bounding box, not caliper-based"
+                              >
                                 ~ approx
                               </span>
                             )}
@@ -276,7 +304,12 @@ export const ScanAnalysisPage = () => {
                         </div>
                       ))
                     ) : (
-                      <p style={{ color: "var(--text-muted)", fontSize: "var(--fs-base)" }}>
+                      <p
+                        style={{
+                          color: "var(--text-muted)",
+                          fontSize: "var(--fs-base)",
+                        }}
+                      >
                         No biometric measurements available.
                       </p>
                     );
@@ -285,30 +318,6 @@ export const ScanAnalysisPage = () => {
               </div>
             </div>
           </GlassPanel>
-
-          {allStructures.length > 0 && (
-            <GlassPanel className="stat-card">
-              <h2>
-                <List size={20} /> Detected Anatomical Structures
-              </h2>
-              <div className="block-table">
-                <div className="block-table-header">
-                  <span>Code</span>
-                  <span>Structure Name</span>
-                </div>
-                <div className="block-table-body">
-                  {allStructures.map((structName) => (
-                    <div key={structName} className="block-table-row">
-                      <span className="block-code">{structName}</span>
-                      <span className="block-name">
-                        {getFullName(structName)}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </GlassPanel>
-          )}
 
           {/* Image Analysis Pipeline */}
           {bestAnnotatedImage && (
@@ -326,34 +335,51 @@ export const ScanAnalysisPage = () => {
             modelsComparison={data.models_comparison}
             bestModelName={data.best_model_name}
           />
-
-          {/* Footer */}
-          <div className="system-info-footer">
-            <div className="system-tag">
-              <Info size={14} />
-              {data.scan_type.toUpperCase()} Analysis Complete — Best Model:{" "}
-              {data.best_model_name}
-            </div>
-          </div>
         </div>
       )}
 
       {(data || selectedFile) && !isLoading && (
-        <button className="floating-reset" onClick={handleReset}>
-          <RefreshCw size={20} />
+        <FloatingActionButton
+          variant="default"
+          size="md"
+          className="fab-pos-1"
+          onClick={handleReset}
+        >
+          <RefreshCw size={16} />
           New Analysis
-        </button>
+        </FloatingActionButton>
       )}
 
       {data && !isLoading && !insufficientDetections && (
-        <button
-          className={`floating-save ${isSaved ? "saved" : ""}`}
-          onClick={handleSave}
-          disabled={isSaving || isSaved}
-        >
-          <ShieldCheck size={20} />
-          {isSaving ? "Saving..." : isSaved ? "Saved" : "Save Scan"}
-        </button>
+        <>
+          <FloatingActionButton
+            variant="save"
+            size="md"
+            isActive={isSaved}
+            className="fab-pos-2"
+            onClick={handleSave}
+            disabled={isSaving || isSaved}
+          >
+            <ShieldCheck size={16} />
+            {isSaving ? "Saving..." : isSaved ? "Saved" : "Save Scan"}
+          </FloatingActionButton>
+
+          <FloatingActionButton
+            variant="success"
+            size="md"
+            className="fab-pos-3"
+            onClick={toggleAbbreviations}
+          >
+            <BookOpen size={16} />
+            Abbreviations
+          </FloatingActionButton>
+
+          <AbbreviationsPanel
+            structures={STRUCTURE_NAMES}
+            isOpen={showAbbreviations}
+            onClose={closeAbbreviations}
+          />
+        </>
       )}
 
       {showSaveConfirm && (
