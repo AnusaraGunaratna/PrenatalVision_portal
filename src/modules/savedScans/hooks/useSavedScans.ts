@@ -5,7 +5,6 @@ export interface SavedScanSummary {
     id: string;
     scan_type: string;
     thumbnail_url: string;
-    best_model_name: string;
     detection_count: number;
     created_at: string;
 }
@@ -16,12 +15,12 @@ export interface SavedScanDetailData {
     original_image_url: string;
     enhanced_image_url: string;
     annotated_image_url: string;
-    best_model_name: string;
     measurements: Record<string, Record<string, unknown>>;
     detections: Array<{
         class_name: string;
         confidence: number;
         bbox: number[];
+        source_model: string;
     }>;
     models_comparison: Array<{
         modelName: string;
@@ -31,17 +30,10 @@ export interface SavedScanDetailData {
             class_name: string;
             confidence: number;
             bbox: number[];
+            source_model: string;
         }>;
     }>;
     calibration_ratio: number;
-    additional_detections?: Array<{
-        class_name: string;
-        confidence: number;
-        bbox: number[];
-        source_model: string;
-    }>;
-    additional_measurements?: Record<string, Record<string, unknown>>;
-    additional_annotated_image_url?: string;
     created_at: string;
 }
 

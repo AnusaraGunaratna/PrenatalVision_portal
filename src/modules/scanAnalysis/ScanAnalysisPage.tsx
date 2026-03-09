@@ -99,61 +99,51 @@ export const ScanAnalysisPage = () => {
   const handleSave = async () => {
     if (!data) return;
 
-    const bestModel = data.models_comparison.find(
-      (m) => m.model_name === data.best_model_name,
-    );
-    if (!bestModel) return;
-
     try {
       await saveScan({
         scan_type: data.scan_type,
         original_image_base64: data.original_image_base64,
         enhanced_image_base64: data.enhanced_image_base64,
-        annotated_image_base64: bestModel.annotated_image_base64,
-        best_model_name: data.best_model_name,
-        best_model_measurements: data.best_model_measurements,
-        detections: bestModel.detections,
-        models_comparison: data.models_comparison.map((m) => ({
+        annotated_image_base64: data.annotated_image_base64,
+        measurements: data.measurements ?? {},
+        detections: data.detections ?? [],
+        models_comparison: (data.models_comparison ?? []).map((m) => ({
           model_name: m.model_name,
-          detections: m.detections,
-          measurements: m.measurements,
+          detections: m.detections ?? [],
+          measurements: m.measurements ?? {},
         })),
-        additional_detections: data.additional_detections || [],
-        additional_measurements: data.additional_measurements || {},
-        additional_annotated_image_base64:
-          data.additional_annotated_image_base64 || "",
-        calibration_ratio: data.models_comparison[0]?.measurements?.length_mm
-          ? undefined
-          : null,
+        calibration_ratio: data.calibration_ratio,
       });
     } catch (err) {
       console.error("Failed to save scan:", err);
     }
   };
 
-  const bestModel = data?.models_comparison.find(
-    (m) => m.model_name === data.best_model_name,
-  );
-  const bestAnnotatedImage = bestModel?.annotated_image_base64 || "";
-  const combinedAnnotatedImage =
-    data?.additional_annotated_image_base64 || bestAnnotatedImage;
-
   const allStructures = data
     ? [
         ...new Set(
-          data.models_comparison.flatMap((m) =>
-            m.detections.map((d) => d.class_name),
+          (data.models_comparison ?? []).flatMap((m) =>
+            (m.detections ?? []).map((d) => d.class_name),
           ),
         ),
       ]
     : [];
 
-  const measurements =
-    data?.best_model_measurements || bestModel?.measurements || {};
+  const measurements = data?.measurements || {};
 
   const MIN_DETECTIONS = 4;
-  const insufficientDetections =
-    data && bestModel ? bestModel.detections.length < MIN_DETECTIONS : false;
+  const maxModelDetections = data
+    ? Math.max(
+        0,
+        ...(data.models_comparison ?? []).map(
+          (m) => (m.detections ?? []).length,
+        ),
+      )
+    : 0;
+  const detectionCount = data?.detections?.length ?? 0;
+  const insufficientDetections = data
+    ? maxModelDetections < MIN_DETECTIONS
+    : false;
 
   return (
     <>
@@ -203,7 +193,7 @@ export const ScanAnalysisPage = () => {
             <h2>{strings["scan.quality.title"]}</h2>
             <p>
               {strings["scan.quality.detectedPrefix"]}
-              <strong>{bestModel?.detections.length ?? 0}</strong>
+              <strong>{maxModelDetections}</strong>
               {strings["scan.quality.detectedSuffix"]}
               <strong>{MIN_DETECTIONS}</strong>
               {strings["scan.quality.detectedEnd"]}
@@ -234,7 +224,7 @@ export const ScanAnalysisPage = () => {
                 <div className="metrics-grid">
                   <MetricItem value={allStructures.length} label="Structures" />
                   <MetricItem
-                    value={bestModel?.detections.length ?? 0}
+                    value={detectionCount}
                     label="Detections"
                   />
                 </div>
@@ -326,21 +316,18 @@ export const ScanAnalysisPage = () => {
           </GlassPanel>
 
           {/* Image Analysis Pipeline */}
-          {combinedAnnotatedImage && (
+          {data.annotated_image_base64 && (
             <ImageAnalysisFlow
               originalBase64={data.original_image_base64}
               enhancedBase64={data.enhanced_image_base64}
-              annotatedBase64={combinedAnnotatedImage}
-              bestModelName={data.best_model_name}
-              detections={bestModel?.detections || []}
-              additionalDetections={data.additional_detections || []}
+              annotatedBase64={data.annotated_image_base64}
+              detections={data.detections ?? []}
             />
           )}
 
           {/* Model Comparison Analytics */}
           <ModelComparisonTable
-            modelsComparison={data.models_comparison}
-            bestModelName={data.best_model_name}
+            modelsComparison={data.models_comparison ?? []}
           />
         </div>
       )}

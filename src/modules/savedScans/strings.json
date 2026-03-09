@@ -9,13 +9,10 @@
     "savedScans.detail.title": "Scan Details",
     "savedScans.detail.back": "Back to Saved Scans",
     "savedScans.detail.scannedOn": "Scanned on",
-    "savedScans.detail.bestModel": "Best Model",
     "savedScans.detail.analysisImages": "Analysis Pipeline",
     "savedScans.detail.measurements": "Biometric Measurements",
     "savedScans.detail.structures": "Detected Structures",
     "savedScans.detail.modelComparison": "Model Comparison",
     "savedScans.detail.noMeasurements": "No biometric measurements available.",
-    "savedScans.error.loading": "Failed to load saved scans",
-    "savedScans.additional.title": "Additional Structures",
-    "savedScans.additional.subtitle": "Detected by supporting models only"
+    "savedScans.error.loading": "Failed to load saved scans"
 }

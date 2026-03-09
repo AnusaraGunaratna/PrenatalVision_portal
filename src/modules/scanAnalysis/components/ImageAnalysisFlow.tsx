@@ -7,22 +7,14 @@ interface Detection {
   class_name: string;
   confidence: number;
   bbox: number[];
-}
-
-interface AdditionalDetection {
-  class_name: string;
-  confidence: number;
-  bbox: number[];
-  source_model: string;
+  source_model?: string;
 }
 
 interface Props {
   originalBase64: string;
   enhancedBase64: string;
   annotatedBase64: string;
-  bestModelName: string;
   detections: Detection[];
-  additionalDetections?: AdditionalDetection[];
 }
 
 interface ActiveDetection {
@@ -109,17 +101,7 @@ export const ImageAnalysisFlow: FC<Props> = ({
   enhancedBase64,
   annotatedBase64,
   detections,
-  additionalDetections = [],
 }) => {
-  const allDetections: Detection[] = [
-    ...detections,
-    ...additionalDetections.map((d) => ({
-      class_name: d.class_name,
-      confidence: d.confidence,
-      bbox: d.bbox,
-    })),
-  ];
-
   const [lightboxSrc, setLightboxSrc] = useState<string | null>(null);
   const [lightboxAlt, setLightboxAlt] = useState("");
   const [lightboxDetection, setLightboxDetection] =
@@ -249,7 +231,7 @@ export const ImageAnalysisFlow: FC<Props> = ({
           ))}
         </div>
 
-        {allDetections.length > 0 && (
+        {detections.length > 0 && (
           <div className="flow-individual-section">
             <button
               className="flow-individual-toggle"
@@ -258,12 +240,12 @@ export const ImageAnalysisFlow: FC<Props> = ({
               {showIndividual ? <EyeOff size={16} /> : <Eye size={16} />}
               {showIndividual
                 ? "Hide Individual Detections"
-                : `Show Individual Detections (${allDetections.length})`}
+                : `Show Individual Detections (${detections.length})`}
             </button>
 
-            {showIndividual && allDetections.length > 0 && (
+            {showIndividual && detections.length > 0 && (
               <div className="flow-gallery anim-slide-down">
-                {allDetections.map((det, idx) => (
+                {detections.map((det, idx) => (
                   <DetectionThumbnail
                     key={idx}
                     det={det}

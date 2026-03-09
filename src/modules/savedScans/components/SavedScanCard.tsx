@@ -1,5 +1,5 @@
 import { FC, useState } from 'react';
-import { Trash2, Clock, Brain } from 'lucide-react';
+import { Trash2, Clock } from 'lucide-react';
 import { SavedScanSummary } from '../hooks/useSavedScans';
 import { Badge } from '../../../libs/components/Badge';
 import strings from '../strings.json';
@@ -53,10 +53,6 @@ export const SavedScanCard: FC<SavedScanCardProps> = ({ scan, onView, onDelete }
                 </div>
 
                 <div className="saved-scan-meta">
-                    <span className="saved-scan-model">
-                        <Brain size={12} />
-                        {scan.best_model_name}
-                    </span>
                     <span className="saved-scan-date">
                         <Clock size={12} />
                         {formattedDate}
