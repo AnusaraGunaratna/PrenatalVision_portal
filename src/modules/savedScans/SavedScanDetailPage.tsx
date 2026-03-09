@@ -1,9 +1,10 @@
 import { FC, useState, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { ArrowLeft, Ruler, List, BookOpen } from "lucide-react";
+import { ArrowLeft, ShieldCheck, Ruler, BookOpen } from "lucide-react";
 import { useSavedScanDetail } from "./hooks/useSavedScans";
 import { GlassPanel } from "../../libs/components/GlassPanel";
 import { Badge } from "../../libs/components/Badge";
+import { MetricItem } from "../../libs/components/MetricItem";
 import { LoadingPortal } from "../../libs/components/LoadingPortal";
 import { ErrorBanner } from "../../libs/components/ErrorBanner";
 import { FloatingActionButton } from "../../libs/components/FloatingActionButton";
@@ -60,7 +61,9 @@ export const SavedScanDetailPage: FC = () => {
   });
 
   const measurements = data.measurements || {};
-  const allStructures = [...new Set((data.detections ?? []).map((d) => d.class_name))];
+  const allStructures = [
+    ...new Set((data.detections ?? []).map((d) => d.class_name)),
+  ];
 
   return (
     <div className="saved-detail-container">
@@ -89,99 +92,146 @@ export const SavedScanDetailPage: FC = () => {
         </div>
       </div>
 
-      {/* Analysis Pipeline Images */}
-      {data.annotated_image_url && (
-        <ImageAnalysisFlow
-          originalBase64={data.original_image_url}
-          enhancedBase64={data.enhanced_image_url}
-          annotatedBase64={data.annotated_image_url}
-          detections={data.detections ?? []}
-        />
-      )}
+      <div className="results-container">
+        <GlassPanel className="stat-card summary-measurements-card">
+          <div className="summary-measurements-header">
+            <div className="summary-left">
+              <h2>
+                <ShieldCheck size={20} /> Analysis Summary
+              </h2>
+              <div className="summary-status-row">
+                <Badge variant={data.scan_type === "crl" ? "crl" : "nt"}>
+                  {data.scan_type === "crl"
+                    ? "Crown-Rump Length View"
+                    : "Nuchal Translucency View"}
+                </Badge>
+              </div>
+              <div className="metrics-grid">
+                <MetricItem value={allStructures.length} label="Structures" />
+                <MetricItem
+                  value={data.detections?.length ?? 0}
+                  label="Detections"
+                />
+              </div>
+            </div>
 
-      {/* Measurements */}
-      <div className="results-header-grid">
-        <GlassPanel className="stat-card">
-          <h2>
-            <Ruler size={20} /> {strings["savedScans.detail.measurements"]}
-          </h2>
-          <div className="measurements-list">
-            {Object.keys(measurements).length > 0 ? (
-              Object.entries(measurements).map(([key, value]) => {
-                const v = value as Record<string, unknown>;
-                let measureText = "";
-                if (v.thickness_mm) measureText = `${v.thickness_mm} mm`;
-                else if (v.length_mm) measureText = `${v.length_mm} mm`;
-                else if (v.length_cm) measureText = `${v.length_cm} cm`;
-                else if (v.dimension_mm) measureText = String(v.dimension_mm);
-                else if (v.BPD_mm) measureText = `BPD: ${v.BPD_mm}mm`;
-                if (v.HC_mm) measureText += ` HC: ${v.HC_mm}mm`;
+            <div className="summary-divider" />
 
-                return (
-                  <div key={key} className="measurement-item">
-                    <div className="m-label">
-                      <strong>{key}</strong>
-                      <span className="m-fullname">({getFullName(key)})</span>
-                    </div>
-                    <div className="m-value">{measureText || "-"}</div>
-                  </div>
-                );
-              })
-            ) : (
-              <p
-                style={{
-                  color: "var(--text-muted)",
-                  fontSize: "var(--fs-base)",
-                }}
-              >
-                {strings["savedScans.detail.noMeasurements"]}
-              </p>
-            )}
+            <div className="summary-right">
+              <h2>
+                <Ruler size={20} /> Biometric Measurements
+              </h2>
+              <div className="measurements-list">
+                {(() => {
+                  const rows: {
+                    label: string;
+                    value: string;
+                    approx?: boolean;
+                  }[] = [];
+
+                  Object.entries(measurements).forEach(([key, value]) => {
+                    const m = value as Record<string, unknown>;
+                    if (key === "Head") {
+                      if (m.BPD_mm)
+                        rows.push({
+                          label: "Biparietal Diameter",
+                          value: `${m.BPD_mm} mm`,
+                        });
+                      if (m.HC_mm)
+                        rows.push({
+                          label: "Head Circumference",
+                          value: `${m.HC_mm} mm`,
+                        });
+                    } else if (key === "Abdomen") {
+                      if (m.circumference_mm)
+                        rows.push({
+                          label: "Abdominal Circumference",
+                          value: `${m.circumference_mm} mm`,
+                        });
+                    } else {
+                      let val = "";
+                      if (m.thickness_mm) val = `${m.thickness_mm} mm`;
+                      else if (m.length_mm) val = `${m.length_mm} mm`;
+                      else if (m.length_cm) val = `${m.length_cm} cm`;
+                      else if (m.dimension_mm) val = String(m.dimension_mm);
+                      if (val) {
+                        const displayName =
+                          key === "NT"
+                            ? `${getFullName(key)} (NT)`
+                            : getFullName(key);
+                        rows.push({
+                          label: displayName,
+                          value: val,
+                          approx: m.approximate as boolean | undefined,
+                        });
+                      }
+                    }
+                  });
+
+                  return rows.length > 0 ? (
+                    rows.map((r) => (
+                      <div key={r.label} className="measurement-item">
+                        <div className="m-label">
+                          <strong>{r.label}</strong>
+                        </div>
+                        <div className="m-value">
+                          {r.value}
+                          {r.approx && (
+                            <span
+                              className="m-approx"
+                              title="Estimated from bounding box, not caliper-based"
+                            >
+                              ~ approx
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <p
+                      style={{
+                        color: "var(--text-muted)",
+                        fontSize: "var(--fs-base)",
+                      }}
+                    >
+                      {strings["savedScans.detail.noMeasurements"]}
+                    </p>
+                  );
+                })()}
+              </div>
+            </div>
           </div>
         </GlassPanel>
+
+        {/* Image Analysis Pipeline */}
+        {data.annotated_image_url && (
+          <ImageAnalysisFlow
+            originalBase64={data.original_image_url}
+            enhancedBase64={data.enhanced_image_url}
+            annotatedBase64={data.annotated_image_url}
+            detections={data.detections ?? []}
+          />
+        )}
+
+        {/* Model Comparison Analytics */}
+        {(data.models_comparison ?? []).length > 0 && (
+          <ModelComparisonTable
+            modelsComparison={(data.models_comparison ?? []).map((m) => ({
+              model_name: m.modelName,
+              detections: m.detections,
+              measurements: m.measurements,
+              metrics: {
+                detection_count: m.detectionCount,
+                average_confidence: 0,
+                highest_confidence: 0,
+                lowest_confidence: 0,
+                execution_time_ms: 0,
+              },
+              annotated_image_base64: "",
+            }))}
+          />
+        )}
       </div>
-
-      {/* Detected Structures */}
-      {allStructures.length > 0 && (
-        <GlassPanel className="stat-card">
-          <h2>
-            <List size={20} /> {strings["savedScans.detail.structures"]}
-          </h2>
-          <div className="block-table">
-            <div className="block-table-header">
-              <span>Code</span>
-              <span>Structure Name</span>
-            </div>
-            <div className="block-table-body">
-              {allStructures.map((structName) => (
-                <div key={structName} className="block-table-row">
-                  <span className="block-code">{structName}</span>
-                  <span className="block-name">{getFullName(structName)}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </GlassPanel>
-      )}
-
-      {/* Model Comparison */}
-      {(data.models_comparison ?? []).length > 0 && (
-        <ModelComparisonTable
-          modelsComparison={(data.models_comparison ?? []).map((m) => ({
-            model_name: m.modelName,
-            detections: m.detections,
-            measurements: m.measurements,
-            metrics: {
-              detection_count: m.detectionCount,
-              average_confidence: 0,
-              highest_confidence: 0,
-              lowest_confidence: 0,
-              execution_time_ms: 0,
-            },
-            annotated_image_base64: "",
-          }))}
-        />
-      )}
 
       <FloatingActionButton
         variant="success"

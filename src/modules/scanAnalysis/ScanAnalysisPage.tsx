@@ -223,10 +223,7 @@ export const ScanAnalysisPage = () => {
                 </div>
                 <div className="metrics-grid">
                   <MetricItem value={allStructures.length} label="Structures" />
-                  <MetricItem
-                    value={detectionCount}
-                    label="Detections"
-                  />
+                  <MetricItem value={detectionCount} label="Detections" />
                 </div>
               </div>
 
