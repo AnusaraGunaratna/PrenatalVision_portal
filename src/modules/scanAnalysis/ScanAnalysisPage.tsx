@@ -53,6 +53,7 @@ export const ScanAnalysisPage = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [scanMode, setScanMode] = useState<ScanMode>("CRL");
+  const [gaWeeks, setGaWeeks] = useState<string>("12"); // default to 12
   const [showSaveConfirm, setShowSaveConfirm] = useState(false);
   const [showAbbreviations, setShowAbbreviations] = useState(false);
 
@@ -74,7 +75,7 @@ export const ScanAnalysisPage = () => {
   const handleAnalyze = async () => {
     if (!selectedFile) return;
     try {
-      await analyzeScan(selectedFile, scanMode.toLowerCase());
+      await analyzeScan(selectedFile, scanMode.toLowerCase(), parseInt(gaWeeks));
     } catch (err) {
       console.error(err);
     }
@@ -168,6 +169,22 @@ export const ScanAnalysisPage = () => {
               <div className="scan-action-divider" />
 
               <ModeSelector mode={scanMode} onModeChange={setScanMode} />
+
+              <div className="scan-action-divider" />
+
+              <div className="ga-selector">
+                <select
+                  value={gaWeeks}
+                  onChange={(e) => setGaWeeks(e.target.value)}
+                  className="ga-dropdown"
+                  title="Gestational Age (weeks)"
+                >
+                  <option value="11">11 Weeks</option>
+                  <option value="12">12 Weeks</option>
+                  <option value="13">13 Weeks</option>
+                  <option value="14">14 Weeks</option>
+                </select>
+              </div>
 
               <Button
                 onClick={handleAnalyze}
