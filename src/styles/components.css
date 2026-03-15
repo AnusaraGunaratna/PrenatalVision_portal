@@ -564,6 +564,7 @@
     font-weight: var(--fw-bold);
     color: var(--text-main);
     line-height: 1.2;
+    margin-top: var(--sp-2);
 }
 
 .metric-label {
@@ -572,7 +573,6 @@
     color: var(--text-muted);
     text-transform: uppercase;
     letter-spacing: 0.03em;
-    margin-top: var(--sp-2);
 }
 
 /*  Measurements List  */
@@ -874,6 +874,8 @@
     width: 100%;
     border-collapse: collapse;
     font-size: var(--fs-base);
+    table-layout: fixed;
+    min-width: 600px; 
 }
 
 .structure-table th,
@@ -881,6 +883,9 @@
     padding: var(--sp-6) var(--sp-8);
     text-align: center;
     border-bottom: 1px solid var(--glass-border);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .structure-table th {
@@ -895,6 +900,7 @@
 .structure-table th:first-child,
 .structure-table td.struct-name {
     text-align: left;
+    width: 110px; 
 }
 
 .structure-table td.struct-name {
@@ -912,13 +918,84 @@
     background: var(--success-highlight);
 }
 
-.structure-table td.best-model-cell {
-    color: var(--primary);
-    font-weight: var(--fw-semibold);
-}
-
 .structure-table tbody tr:hover {
     background: var(--glass-row);
+}
+
+/* Nested Benchmark Dashboard */
+.benchmark-dashboard {
+    margin: var(--sp-6) var(--sp-8) var(--sp-8);
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+}
+
+.benchmark-toggle {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--sp-4) var(--sp-6);
+    background: rgba(99, 102, 241, 0.05);
+    border: none;
+    cursor: pointer;
+    transition: all var(--duration-fast) var(--ease-smooth);
+}
+
+.benchmark-toggle:hover {
+    background: rgba(99, 102, 241, 0.1);
+}
+
+.benchmark-toggle .toggle-left {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-4);
+    color: var(--primary);
+}
+
+.benchmark-toggle span {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: var(--fw-bold);
+}
+
+.benchmark-details {
+    padding: var(--sp-6);
+    border-top: 1px solid var(--glass-border);
+    overflow-x: auto;
+}
+
+.benchmark-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--fs-sm);
+    table-layout: fixed;
+    min-width: 600px; 
+}
+
+.benchmark-table th {
+    text-align: center;
+    color: var(--text-muted);
+    font-weight: var(--fw-medium);
+    padding: var(--sp-3);
+    border-bottom: 1px solid var(--glass-border);
+}
+
+.benchmark-table td {
+    text-align: center;
+    padding: var(--sp-3);
+    color: var(--text-main);
+    font-family: var(--font-mono);
+}
+
+.benchmark-table .metric-name {
+    text-align: left;
+    font-family: var(--font-body);
+    font-weight: var(--fw-semibold);
+    color: var(--primary);
+    width: 100px;
 }
 
 /*  Analytics Panel  */
