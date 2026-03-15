@@ -1,0 +1,159 @@
+{
+  "updatedAt": "2026-03-15T22:18:56.600Z",
+  "samples": [
+    {
+      "id": "crl-0d4c69e56a95aa2996ffb08b4efa5e4b2c9624e11b237bc02ebab777288f9f81.jpg",
+      "name": "0d4c69e56a95aa2996ffb08b4efa5e4b2c9624e11b237bc02ebab777288f9f81",
+      "fileName": "0d4c69e56a95aa2996ffb08b4efa5e4b2c9624e11b237bc02ebab777288f9f81.jpg",
+      "url": "/assets/samples/crl/0d4c69e56a95aa2996ffb08b4efa5e4b2c9624e11b237bc02ebab777288f9f81.jpg",
+      "type": "crl"
+    },
+    {
+      "id": "crl-3CRL.jpg",
+      "name": "3CRL",
+      "fileName": "3CRL.jpg",
+      "url": "/assets/samples/crl/3CRL.jpg",
+      "type": "crl"
+    },
+    {
+      "id": "crl-Screenshot 2026-03-04 114012.png",
+      "name": "Screenshot 2026 03 04 114012",
+      "fileName": "Screenshot 2026-03-04 114012.png",
+      "url": "/assets/samples/crl/Screenshot 2026-03-04 114012.png",
+      "type": "crl"
+    },
+    {
+      "id": "crl-Screenshot 2026-03-04 114032.png",
+      "name": "Screenshot 2026 03 04 114032",
+      "fileName": "Screenshot 2026-03-04 114032.png",
+      "url": "/assets/samples/crl/Screenshot 2026-03-04 114032.png",
+      "type": "crl"
+    },
+    {
+      "id": "crl-Screenshot 2026-03-09 143223.png",
+      "name": "Screenshot 2026 03 09 143223",
+      "fileName": "Screenshot 2026-03-09 143223.png",
+      "url": "/assets/samples/crl/Screenshot 2026-03-09 143223.png",
+      "type": "crl"
+    },
+    {
+      "id": "crl-Screenshot 2026-03-09 143348.png",
+      "name": "Screenshot 2026 03 09 143348",
+      "fileName": "Screenshot 2026-03-09 143348.png",
+      "url": "/assets/samples/crl/Screenshot 2026-03-09 143348.png",
+      "type": "crl"
+    },
+    {
+      "id": "crl-test1.jpg",
+      "name": "Test1",
+      "fileName": "test1.jpg",
+      "url": "/assets/samples/crl/test1.jpg",
+      "type": "crl"
+    },
+    {
+      "id": "crl-test2.jpg",
+      "name": "Test2",
+      "fileName": "test2.jpg",
+      "url": "/assets/samples/crl/test2.jpg",
+      "type": "crl"
+    },
+    {
+      "id": "nt-1a63bb3aeb4003c24dbebd3b3596e7e564a0ca0c796e48c13e3d1067f1aa0278.jpg",
+      "name": "1a63bb3aeb4003c24dbebd3b3596e7e564a0ca0c796e48c13e3d1067f1aa0278",
+      "fileName": "1a63bb3aeb4003c24dbebd3b3596e7e564a0ca0c796e48c13e3d1067f1aa0278.jpg",
+      "url": "/assets/samples/nt/1a63bb3aeb4003c24dbebd3b3596e7e564a0ca0c796e48c13e3d1067f1aa0278.jpg",
+      "type": "nt"
+    },
+    {
+      "id": "nt-1b23c3804658f87e43716d7d4353397f7a1a02dca7b81edce48c294279f3f293.jpg",
+      "name": "1b23c3804658f87e43716d7d4353397f7a1a02dca7b81edce48c294279f3f293",
+      "fileName": "1b23c3804658f87e43716d7d4353397f7a1a02dca7b81edce48c294279f3f293.jpg",
+      "url": "/assets/samples/nt/1b23c3804658f87e43716d7d4353397f7a1a02dca7b81edce48c294279f3f293.jpg",
+      "type": "nt"
+    },
+    {
+      "id": "nt-3NT.jpg",
+      "name": "3NT",
+      "fileName": "3NT.jpg",
+      "url": "/assets/samples/nt/3NT.jpg",
+      "type": "nt"
+    },
+    {
+      "id": "nt-hq720.jpg",
+      "name": "Hq720",
+      "fileName": "hq720.jpg",
+      "url": "/assets/samples/nt/hq720.jpg",
+      "type": "nt"
+    },
+    {
+      "id": "nt-Screenshot 2026-03-09 141931.png",
+      "name": "Screenshot 2026 03 09 141931",
+      "fileName": "Screenshot 2026-03-09 141931.png",
+      "url": "/assets/samples/nt/Screenshot 2026-03-09 141931.png",
+      "type": "nt"
+    },
+    {
+      "id": "nt-Screenshot 2026-03-09 141943.png",
+      "name": "Screenshot 2026 03 09 141943",
+      "fileName": "Screenshot 2026-03-09 141943.png",
+      "url": "/assets/samples/nt/Screenshot 2026-03-09 141943.png",
+      "type": "nt"
+    },
+    {
+      "id": "nt-Screenshot 2026-03-09 141954.png",
+      "name": "Screenshot 2026 03 09 141954",
+      "fileName": "Screenshot 2026-03-09 141954.png",
+      "url": "/assets/samples/nt/Screenshot 2026-03-09 141954.png",
+      "type": "nt"
+    },
+    {
+      "id": "nt-Screenshot 2026-03-09 142004.png",
+      "name": "Screenshot 2026 03 09 142004",
+      "fileName": "Screenshot 2026-03-09 142004.png",
+      "url": "/assets/samples/nt/Screenshot 2026-03-09 142004.png",
+      "type": "nt"
+    },
+    {
+      "id": "nt-Screenshot 2026-03-09 142123.png",
+      "name": "Screenshot 2026 03 09 142123",
+      "fileName": "Screenshot 2026-03-09 142123.png",
+      "url": "/assets/samples/nt/Screenshot 2026-03-09 142123.png",
+      "type": "nt"
+    },
+    {
+      "id": "nt-Screenshot 2026-03-09 142138.png",
+      "name": "Screenshot 2026 03 09 142138",
+      "fileName": "Screenshot 2026-03-09 142138.png",
+      "url": "/assets/samples/nt/Screenshot 2026-03-09 142138.png",
+      "type": "nt"
+    },
+    {
+      "id": "nt-Screenshot 2026-03-09 142153.png",
+      "name": "Screenshot 2026 03 09 142153",
+      "fileName": "Screenshot 2026-03-09 142153.png",
+      "url": "/assets/samples/nt/Screenshot 2026-03-09 142153.png",
+      "type": "nt"
+    },
+    {
+      "id": "nt-Screenshot 2026-03-09 142206.png",
+      "name": "Screenshot 2026 03 09 142206",
+      "fileName": "Screenshot 2026-03-09 142206.png",
+      "url": "/assets/samples/nt/Screenshot 2026-03-09 142206.png",
+      "type": "nt"
+    },
+    {
+      "id": "nt-Screenshot 2026-03-09 142219.png",
+      "name": "Screenshot 2026 03 09 142219",
+      "fileName": "Screenshot 2026-03-09 142219.png",
+      "url": "/assets/samples/nt/Screenshot 2026-03-09 142219.png",
+      "type": "nt"
+    },
+    {
+      "id": "nt-test44.jpg",
+      "name": "Test44",
+      "fileName": "test44.jpg",
+      "url": "/assets/samples/nt/test44.jpg",
+      "type": "nt"
+    }
+  ]
+}
