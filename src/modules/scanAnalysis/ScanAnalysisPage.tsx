@@ -6,6 +6,8 @@ import {
   RefreshCw,
   BookOpen,
   AlertTriangle,
+  Upload,
+  Image,
 } from "lucide-react";
 import { useScanApi } from "../../libs/hooks/useScanApi";
 import { Button } from "../../libs/components/Button";
@@ -20,6 +22,7 @@ import { FloatingActionButton } from "../../libs/components/FloatingActionButton
 import { AbbreviationsPanel } from "../../libs/components/AbbreviationsPanel";
 import { ImageAnalysisFlow } from "./components/ImageAnalysisFlow";
 import { ModelComparisonTable } from "./components/ModelComparisonTable";
+import { SampleGallery } from "./components/SampleGallery";
 import { SaveConfirmDialog } from "./components/SaveConfirmDialog";
 import { useSaveScan } from "./hooks/useSaveScan";
 import strings from "./strings.json";
@@ -71,6 +74,30 @@ export const ScanAnalysisPage = () => {
     reset();
     resetSaveState();
   };
+
+  const handleSampleSelect = useCallback(
+    async (url: string, fileName: string, type: "crl" | "nt") => {
+      try {
+        const mode = type.toUpperCase() as ScanMode;
+        setScanMode(mode);
+
+        const response = await fetch(url);
+        if (!response.ok) throw new Error("Failed to fetch image");
+
+        const blob = await response.blob();
+        const file = new File([blob], fileName, { type: blob.type || 'image/png' });
+
+        setSelectedFile(file);
+        setPreview(URL.createObjectURL(file));
+        reset();
+        resetSaveState();
+      } catch (err) {
+        console.error("Failed to load sample image:", err);
+        alert("Could not load sample image. Please try another one.");
+      }
+    },
+    [reset, resetSaveState, setScanMode]
+  );
 
   const handleAnalyze = async () => {
     if (!selectedFile) return;
@@ -137,11 +164,36 @@ export const ScanAnalysisPage = () => {
     ? maxModelDetections < MIN_DETECTIONS
     : false;
 
+  const [sourceType, setSourceType] = useState<"UPLOAD" | "SAMPLES">("UPLOAD");
+
   return (
     <>
       {!data && !isLoading && (
         <div className="upload-container">
-          <UploadZone onFileSelect={handleFileSelect} />
+          <div className="source-toggle-container">
+            <button
+              className={`source-toggle-btn ${sourceType === "UPLOAD" ? "active" : ""}`}
+              onClick={() => setSourceType("UPLOAD")}
+            >
+              <Upload size={18} />
+              Upload
+            </button>
+            <button
+              className={`source-toggle-btn ${sourceType === "SAMPLES" ? "active" : ""}`}
+              onClick={() => setSourceType("SAMPLES")}
+            >
+              <Image size={18} />
+              Quick Samples
+            </button>
+          </div>
+
+          <div className="source-content anim-fade-in">
+            {sourceType === "UPLOAD" ? (
+              <UploadZone onFileSelect={handleFileSelect} />
+            ) : (
+              <SampleGallery onSelect={handleSampleSelect} isLoading={isLoading} />
+            )}
+          </div>
 
           {selectedFile && (
             <div className="scan-action-bar anim-slide-in">
