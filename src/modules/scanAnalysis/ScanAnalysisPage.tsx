@@ -82,7 +82,7 @@ export const ScanAnalysisPage = () => {
   };
 
   const handleReset = () => {
-    if (data && !isSaved) {
+    if (data && !isSaved && !insufficientDetections) {
       setShowSaveConfirm(true);
       return;
     }
@@ -120,26 +120,17 @@ export const ScanAnalysisPage = () => {
     }
   };
 
-  const allStructures = data
-    ? [
-        ...new Set(
-          (data.models_comparison ?? []).flatMap((m) =>
-            (m.detections ?? []).map((d) => d.class_name),
-          ),
-        ),
-      ]
-    : [];
 
   const measurements = data?.measurements || {};
 
   const MIN_DETECTIONS = 4;
   const maxModelDetections = data
     ? Math.max(
-        0,
-        ...(data.models_comparison ?? []).map(
-          (m) => (m.detections ?? []).length,
-        ),
-      )
+      0,
+      ...(data.models_comparison ?? []).map(
+        (m) => (m.detections ?? []).length,
+      ),
+    )
     : 0;
   const detectionCount = data?.detections?.length ?? 0;
   const insufficientDetections = data
@@ -239,8 +230,10 @@ export const ScanAnalysisPage = () => {
                   </Badge>
                 </div>
                 <div className="metrics-grid">
-                  <MetricItem value={allStructures.length} label="Structures" />
-                  <MetricItem value={detectionCount} label="Detections" />
+                  <MetricItem
+                    value={detectionCount}
+                    label="Structures Detected"
+                  />
                 </div>
               </div>
 
@@ -341,6 +334,7 @@ export const ScanAnalysisPage = () => {
 
           {/* Model Comparison Analytics */}
           <ModelComparisonTable
+            scanType={data.scan_type}
             modelsComparison={data.models_comparison ?? []}
           />
         </div>
