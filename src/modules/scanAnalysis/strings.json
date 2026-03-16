@@ -4,6 +4,7 @@
     "scan.upload.placeholder": "Click or drag an image here to upload",
     "scan.upload.supported": "Supported formats: JPEG, PNG, DICOM",
     "scan.button.analyze": "Analyze Scan",
+    "scan.loading.analyzing": "Loading...",
     "scan.button.comparing": "Comparing Models...",
     "scan.button.viewComparisons": "View Model Comparisons",
     "scan.error.noFile": "Please select a file to upload.",

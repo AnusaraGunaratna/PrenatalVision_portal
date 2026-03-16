@@ -5,6 +5,7 @@ interface FloatingActionButtonProps extends ButtonHTMLAttributes<HTMLButtonEleme
   variant?: "default" | "save" | "success";
   size?: "sm" | "md" | "lg";
   isActive?: boolean;
+  tooltip?: string;
 }
 
 export const FloatingActionButton = ({
@@ -12,6 +13,7 @@ export const FloatingActionButton = ({
   variant = "default",
   size = "md",
   isActive = false,
+  tooltip,
   className = "",
   ...props
 }: FloatingActionButtonProps) => {
@@ -31,6 +33,7 @@ export const FloatingActionButton = ({
       {...props}
     >
       {children}
+      {tooltip && <span className="fab-tooltip">{tooltip}</span>}
     </button>
   );
 };

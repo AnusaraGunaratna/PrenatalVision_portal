@@ -1,15 +1,14 @@
 import { FC, useEffect } from "react";
 import { X } from "lucide-react";
+import { STRUCTURE_NAMES } from "../../constants/anatomy";
 import strings from "./AbbreviationsPanel.strings.json";
 
 interface AbbreviationsPanelProps {
-  structures: Record<string, string>;
   isOpen: boolean;
   onClose: () => void;
 }
 
 export const AbbreviationsPanel: FC<AbbreviationsPanelProps> = ({
-  structures,
   isOpen,
   onClose,
 }) => {
@@ -43,7 +42,7 @@ export const AbbreviationsPanel: FC<AbbreviationsPanelProps> = ({
           <span>{strings["abbreviations.header.name"]}</span>
         </div>
         <div className="abbrev-table-body">
-          {Object.entries(structures).map(([code, name]) => (
+          {Object.entries(STRUCTURE_NAMES).map(([code, name]) => (
             <div key={code} className="abbrev-row">
               <span className="abbrev-code">{code}</span>
               <span className="abbrev-name">{name}</span>
