@@ -1,6 +1,7 @@
 import { FC, useState, useEffect, useRef } from "react";
 import { ArrowRight, Eye, EyeOff, ZoomIn } from "lucide-react";
 import { GlassPanel } from "../../../libs/components/GlassPanel";
+import { getFullName } from "../../../libs/constants/anatomy";
 import { ImageLightbox } from "./ImageLightbox";
 
 interface Detection {
@@ -22,24 +23,6 @@ interface ActiveDetection {
   confidence: number;
   bbox: number[];
 }
-
-const STRUCTURE_NAMES: Record<string, string> = {
-  MX: "Maxilla",
-  MDS: "Mid-Diaphysis",
-  MLS: "Mid-Lumbar Spine",
-  LV: "Lateral Ventricle",
-  H: "Head",
-  G: "Gestational Sac",
-  C: "Chorion",
-  AB: "Abdominal Wall",
-  B: "Buttocks",
-  RBP: "Retrobulbar Periorbital",
-  DP: "Diencephalic/Prosencephalic",
-  NTAPS: "NT Alignment/Position",
-  NB: "Nasal Bone",
-  NT: "Nuchal Translucency",
-  CRL: "Crown-Rump Length",
-};
 
 const DetectionThumbnail: FC<{
   det: Detection;
@@ -254,7 +237,7 @@ export const ImageAnalysisFlow: FC<Props> = ({
                     onClick={() =>
                       openLightbox(
                         enhancedBase64,
-                        `${det.class_name} — ${STRUCTURE_NAMES[det.class_name] || det.class_name}`,
+                        `${det.class_name} — ${getFullName(det.class_name)}`,
                         det,
                       )
                     }

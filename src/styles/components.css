@@ -1213,6 +1213,42 @@
     white-space: nowrap;
 }
 
+.fab .fab-tooltip {
+    position: absolute;
+    right: 110%;
+    top: 50%;
+    transform: translateY(-50%) translateX(10px);
+    background: #1e293b;
+    color: white;
+    padding: var(--sp-3) var(--sp-5);
+    border-radius: var(--radius-lg);
+    font-size: 0.75rem;
+    font-weight: var(--fw-medium);
+    pointer-events: none;
+    opacity: 0;
+    visibility: hidden;
+    transition: all var(--duration-fast) var(--ease-smooth);
+    box-shadow: var(--shadow-float);
+    border: 1px solid var(--glass-border);
+}
+
+.fab:hover .fab-tooltip {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(-50%) translateX(0);
+}
+
+.fab .fab-tooltip::after {
+    content: '';
+    position: absolute;
+    right: -5px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    border-left: 5px solid #1e293b;
+}
+
 /*  FAB sizes (fixed width per size so all buttons match)  */
 .fab--sm {
     padding: var(--sp-4) 0;
@@ -1304,6 +1340,10 @@
 
 .fab-pos-3 {
     bottom: calc(var(--sp-12) + 96px + var(--sp-10));
+}
+
+.fab-pos-4 {
+    bottom: calc(var(--sp-12) + 144px + var(--sp-14));
 }
 
 /*  Abbreviations Side Panel (right-anchored, non-blocking)  */

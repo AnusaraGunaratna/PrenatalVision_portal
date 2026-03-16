@@ -70,11 +70,33 @@ export const useScanApi = () => {
         }
     }, []);
 
+    const downloadReport = useCallback(async (id: string) => {
+        setIsLoading(true);
+        setError(null);
+        try {
+            const response: any = await apiClient.get(`/saved-scans/${id}/report`, {
+                responseType: 'blob'
+            });
+            const url = window.URL.createObjectURL(new Blob([response]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', `PrenatalVision_Report_${id}.pdf`);
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+        } catch (err: any) {
+            setError(err.message || 'Failed to download report.');
+            throw err;
+        } finally {
+            setIsLoading(false);
+        }
+    }, []);
+
     const reset = useCallback(() => {
         setData(null);
         setError(null);
         setIsLoading(false);
     }, []);
 
-    return { analyzeScan, isLoading, error, data, reset };
+    return { analyzeScan, downloadReport, isLoading, error, data, reset };
 };

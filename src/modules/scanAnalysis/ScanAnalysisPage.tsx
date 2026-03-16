@@ -8,6 +8,7 @@ import {
   AlertTriangle,
   Upload,
   Image,
+  FileText,
 } from "lucide-react";
 import { useScanApi } from "../../libs/hooks/useScanApi";
 import { Button } from "../../libs/components/Button";
@@ -25,34 +26,15 @@ import { ModelComparisonTable } from "./components/ModelComparisonTable";
 import { SampleGallery } from "./components/SampleGallery";
 import { SaveConfirmDialog } from "./components/SaveConfirmDialog";
 import { useSaveScan } from "./hooks/useSaveScan";
+import { getFullName } from "../../libs/constants/anatomy";
 import strings from "./strings.json";
 
 type ScanMode = "CRL" | "NT" | "AUTO";
 
-const STRUCTURE_NAMES: Record<string, string> = {
-  MX: "Maxilla",
-  MDS: "Mid-Diaphysis",
-  MLS: "Mid-Lumbar Spine",
-  LV: "Lateral Ventricle",
-  H: "Head",
-  G: "Gestational Sac",
-  C: "Chorion",
-  AB: "Abdominal Wall",
-  B: "Buttocks",
-  RBP: "Retrobulbar Periorbital",
-  DP: "Diencephalic/Prosencephalic",
-  NTAPS: "NT Alignment/Position",
-  NB: "Nasal Bone",
-  NT: "Nuchal Translucency",
-  CRL: "Crown-Rump Length",
-};
-
-const getFullName = (abbrev: string): string =>
-  STRUCTURE_NAMES[abbrev] || abbrev;
 
 export const ScanAnalysisPage = () => {
-  const { analyzeScan, isLoading, error, data, reset } = useScanApi();
-  const { saveScan, isSaving, isSaved, resetSaveState } = useSaveScan();
+  const { analyzeScan, downloadReport, isLoading, error, data, reset } = useScanApi();
+  const { saveScan, isSaving, isSaved, savedId, resetSaveState } = useSaveScan();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [scanMode, setScanMode] = useState<ScanMode>("CRL");
@@ -121,6 +103,7 @@ export const ScanAnalysisPage = () => {
     setPreview(null);
     reset();
     resetSaveState();
+    resetSaveState();
     setShowSaveConfirm(false);
   };
 
@@ -139,6 +122,7 @@ export const ScanAnalysisPage = () => {
           model_name: m.model_name,
           detections: m.detections ?? [],
           measurements: m.measurements ?? {},
+          annotated_image_base64: m.annotated_image_base64,
         })),
         calibration_ratio: data.calibration_ratio,
       });
@@ -242,7 +226,7 @@ export const ScanAnalysisPage = () => {
         </div>
       )}
 
-      {isLoading && <LoadingPortal />}
+      {isLoading && <LoadingPortal message={strings["scan.loading.analyzing"]} />}
 
       {error && <ErrorBanner message={error} />}
 
@@ -407,10 +391,20 @@ export const ScanAnalysisPage = () => {
       {data && !isLoading && !insufficientDetections && (
         <>
           <FloatingActionButton
+            variant="success"
+            size="md"
+            className="fab-pos-4"
+            onClick={toggleAbbreviations}
+          >
+            <BookOpen size={16} />
+            Abbreviations
+          </FloatingActionButton>
+
+          <FloatingActionButton
             variant="save"
             size="md"
             isActive={isSaved}
-            className="fab-pos-2"
+            className="fab-pos-3"
             onClick={handleSave}
             disabled={isSaving || isSaved}
           >
@@ -419,17 +413,18 @@ export const ScanAnalysisPage = () => {
           </FloatingActionButton>
 
           <FloatingActionButton
-            variant="success"
+            variant="default"
             size="md"
-            className="fab-pos-3"
-            onClick={toggleAbbreviations}
+            className="fab-pos-2"
+            onClick={() => savedId && downloadReport(savedId)}
+            disabled={!isSaved || !savedId}
+            tooltip={!isSaved ? "Please save the scan first to generate a PDF report." : ""}
           >
-            <BookOpen size={16} />
-            Abbreviations
+            <FileText size={16} />
+            Generate PDF
           </FloatingActionButton>
 
           <AbbreviationsPanel
-            structures={STRUCTURE_NAMES}
             isOpen={showAbbreviations}
             onClose={closeAbbreviations}
           />

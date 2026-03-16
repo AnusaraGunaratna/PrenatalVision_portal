@@ -1,7 +1,8 @@
 import { FC, useState, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { ArrowLeft, ShieldCheck, Ruler, BookOpen } from "lucide-react";
+import { ArrowLeft, ShieldCheck, Ruler, BookOpen, FileText, RefreshCw } from "lucide-react";
 import { useSavedScanDetail } from "./hooks/useSavedScans";
+import { useScanApi } from "../../libs/hooks/useScanApi";
 import { GlassPanel } from "../../libs/components/GlassPanel";
 import { Badge } from "../../libs/components/Badge";
 import { MetricItem } from "../../libs/components/MetricItem";
@@ -11,33 +12,14 @@ import { FloatingActionButton } from "../../libs/components/FloatingActionButton
 import { AbbreviationsPanel } from "../../libs/components/AbbreviationsPanel";
 import { ImageAnalysisFlow } from "../scanAnalysis/components/ImageAnalysisFlow";
 import { ModelComparisonTable } from "../scanAnalysis/components/ModelComparisonTable";
+import { getFullName } from "../../libs/constants/anatomy";
 import strings from "./strings.json";
-
-const STRUCTURE_NAMES: Record<string, string> = {
-  MX: "Maxilla",
-  MDS: "Mid-Diaphysis",
-  MLS: "Mid-Lumbar Spine",
-  LV: "Lateral Ventricle",
-  H: "Head",
-  G: "Gestational Sac",
-  C: "Chorion",
-  AB: "Abdominal Wall",
-  B: "Buttocks",
-  RBP: "Retrobulbar Periorbital",
-  DP: "Diencephalic/Prosencephalic",
-  NTAPS: "NT Alignment/Position",
-  NB: "Nasal Bone",
-  NT: "Nuchal Translucency",
-  CRL: "Crown-Rump Length",
-};
-
-const getFullName = (abbrev: string): string =>
-  STRUCTURE_NAMES[abbrev] || abbrev;
 
 export const SavedScanDetailPage: FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { data, isLoading, error } = useSavedScanDetail(id);
+  const { downloadReport, isLoading: isDownloading } = useScanApi();
   const [showAbbreviations, setShowAbbreviations] = useState(false);
 
   const toggleAbbreviations = useCallback(() => {
@@ -216,18 +198,12 @@ export const SavedScanDetailPage: FC = () => {
         {/* Model Comparison Analytics */}
         {(data.models_comparison ?? []).length > 0 && (
           <ModelComparisonTable
+            scanType={data.scan_type}
             modelsComparison={(data.models_comparison ?? []).map((m) => ({
               model_name: m.modelName,
-              detections: m.detections,
-              measurements: m.measurements,
-              metrics: {
-                detection_count: m.detectionCount,
-                average_confidence: 0,
-                highest_confidence: 0,
-                lowest_confidence: 0,
-                execution_time_ms: 0,
-              },
-              annotated_image_base64: "",
+              detections: m.detections ?? [],
+              measurements: m.measurements as any,
+              annotated_image_base64: "", 
             }))}
           />
         )}
@@ -236,15 +212,35 @@ export const SavedScanDetailPage: FC = () => {
       <FloatingActionButton
         variant="success"
         size="md"
-        className="fab-pos-1"
+        className="fab-pos-3"
         onClick={toggleAbbreviations}
       >
         <BookOpen size={16} />
         Abbreviations
       </FloatingActionButton>
 
+      <FloatingActionButton
+        variant="default"
+        size="md"
+        className="fab-pos-2"
+        onClick={() => id && downloadReport(id)}
+        disabled={isDownloading}
+      >
+        <FileText size={16} />
+        {isDownloading ? "Generating..." : "Generate PDF"}
+      </FloatingActionButton>
+
+      <FloatingActionButton
+        variant="default"
+        size="md"
+        className="fab-pos-1"
+        onClick={() => navigate("/")}
+      >
+        <RefreshCw size={16} />
+        New Analysis
+      </FloatingActionButton>
+
       <AbbreviationsPanel
-        structures={STRUCTURE_NAMES}
         isOpen={showAbbreviations}
         onClose={closeAbbreviations}
       />
