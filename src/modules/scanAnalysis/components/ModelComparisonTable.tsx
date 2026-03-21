@@ -10,18 +10,18 @@ interface Props {
 
 const MODEL_BENCHMARKS: Record<string, Record<string, Record<string, string>>> = {
   crl: {
-    CoordNet: { mAP50: "96.5%", "mAP50-95": "77.4%", Precision: "93.1%", Recall: "93.1%" },
-    LDBNet: { mAP50: "96.1%", "mAP50-95": "77.5%", Precision: "92.4%", Recall: "93.8%" },
-    HybridNet: { mAP50: "96.3%", "mAP50-95": "76.6%", Precision: "93.2%", Recall: "92.9%" },
-    "Original YOLO11": { mAP50: "96.4%", "mAP50-95": "78.8%", Precision: "94.3%", Recall: "92.2%" },
-    "Original YOLO8": { mAP50: "95.7%", "mAP50-95": "78.8%", Precision: "92.8%", Recall: "91.8%" },
+    "PV-Coord": { mAP50: "96.5%", "mAP50-95": "77.4%", Precision: "93.1%", Recall: "93.1%" },
+    "PV-LDB": { mAP50: "96.1%", "mAP50-95": "77.5%", Precision: "92.4%", Recall: "93.8%" },
+    "PV-Hybrid": { mAP50: "96.3%", "mAP50-95": "76.6%", Precision: "93.2%", Recall: "92.9%" },
+    YOLO11: { mAP50: "96.4%", "mAP50-95": "78.8%", Precision: "94.3%", Recall: "92.2%" },
+    YOLO8: { mAP50: "95.7%", "mAP50-95": "78.8%", Precision: "92.8%", Recall: "91.8%" },
   },
   nt: {
-    CoordNet: { mAP50: "96.3%", "mAP50-95": "75.4%", Precision: "92.6%", Recall: "93.1%" },
-    LDBNet: { mAP50: "96.0%", "mAP50-95": "75.4%", Precision: "90.2%", Recall: "94.1%" },
-    HybridNet: { mAP50: "96.0%", "mAP50-95": "73.9%", Precision: "89.8%", Recall: "94.5%" },
-    "Original YOLO11": { mAP50: "95.7%", "mAP50-95": "76.1%", Precision: "92.4%", Recall: "92.2%" },
-    "Original YOLO8": { mAP50: "95.1%", "mAP50-95": "75.8%", Precision: "92.5%", Recall: "91.9%" },
+    "PV-Coord": { mAP50: "96.3%", "mAP50-95": "75.4%", Precision: "92.6%", Recall: "93.1%" },
+    "PV-LDB": { mAP50: "96.0%", "mAP50-95": "75.4%", Precision: "90.2%", Recall: "94.1%" },
+    "PV-Hybrid": { mAP50: "96.0%", "mAP50-95": "73.9%", Precision: "89.8%", Recall: "94.5%" },
+    YOLO11: { mAP50: "95.7%", "mAP50-95": "76.1%", Precision: "92.4%", Recall: "92.2%" },
+    YOLO8: { mAP50: "95.1%", "mAP50-95": "75.8%", Precision: "92.5%", Recall: "91.9%" },
   },
 };
 
@@ -33,13 +33,13 @@ export const ModelComparisonTable: FC<Props> = ({
   const [showBenchmarks, setShowBenchmarks] = useState(false);
 
   const FIXED_ORDER = [
-    "CoordNet",
-    "LDBNet",
-    "HybridNet",
-    "Original YOLO11",
-    "Original YOLO8",
+    "PV-Coord",
+    "PV-LDB",
+    "PV-Hybrid",
+    "YOLO11",
+    "YOLO8",
   ];
-  const SPECIALIZED_MODELS = ["CoordNet", "LDBNet", "HybridNet"];
+  const SPECIALIZED_MODELS = ["PV-Coord", "PV-LDB", "PV-Hybrid"];
 
   if (modelsComparison.length === 0) return null;
 

@@ -46,7 +46,7 @@ export const UploadZone: FC<Props> = ({
             </div>
             <h3>Upload Ultrasound Image</h3>
             <p>Drag and drop or click to browse</p>
-            <p className="upload-hint">Supports JPG, PNG, DICOM formats</p>
+            <p className="upload-hint">Supports JPG & PNG formats</p>
         </div>
     );
 };
