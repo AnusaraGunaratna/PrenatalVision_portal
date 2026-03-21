@@ -19,7 +19,7 @@ jobs:
         with:
           node-version: '20'
           cache: 'npm'
-          cache-dependency-path: PrenatalVision_portal/package-lock.json
+          cache-dependency-path: package-lock.json
 
       - name: Install and Build
         run: |
