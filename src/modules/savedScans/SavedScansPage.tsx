@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FolderOpen, AlertCircle } from 'lucide-react';
+import { FolderOpen } from 'lucide-react';
 import { useSavedScans } from './hooks/useSavedScans';
 import { SavedScanCard } from './components/SavedScanCard';
 import { GlassPanel } from '../../libs/components/GlassPanel';
