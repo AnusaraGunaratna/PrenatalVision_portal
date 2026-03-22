@@ -20,6 +20,7 @@ import { ModeSelector } from "../../libs/components/ModeSelector";
 import { LoadingPortal } from "../../libs/components/LoadingPortal";
 import { ErrorBanner } from "../../libs/components/ErrorBanner";
 import { FloatingActionButton } from "../../libs/components/FloatingActionButton";
+import { FABMobileMenu } from "../../libs/components/FloatingActionButton/FABMobileMenu";
 import { AbbreviationsPanel } from "../../libs/components/AbbreviationsPanel";
 import { ImageAnalysisFlow } from "./components/ImageAnalysisFlow";
 import { ModelComparisonTable } from "./components/ModelComparisonTable";
@@ -377,58 +378,62 @@ export const ScanAnalysisPage = () => {
       )}
 
       {(data || selectedFile) && !isLoading && (
-        <FloatingActionButton
-          variant="default"
-          size="md"
-          className="fab-pos-1"
-          onClick={handleReset}
-        >
-          <RefreshCw size={16} />
-          New Analysis
-        </FloatingActionButton>
-      )}
-
-      {data && !isLoading && !insufficientDetections && (
-        <>
-          <FloatingActionButton
-            variant="success"
-            size="md"
-            className="fab-pos-4"
-            onClick={toggleAbbreviations}
-          >
-            <BookOpen size={16} />
-            Abbreviations
-          </FloatingActionButton>
-
-          <FloatingActionButton
-            variant="save"
-            size="md"
-            isActive={isSaved}
-            className="fab-pos-3"
-            onClick={handleSave}
-            disabled={isSaving || isSaved}
-          >
-            <ShieldCheck size={16} />
-            {isSaving ? "Saving..." : isSaved ? "Saved" : "Save Scan"}
-          </FloatingActionButton>
-
+        <FABMobileMenu>
           <FloatingActionButton
             variant="default"
             size="md"
-            className="fab-pos-2"
-            onClick={() => savedId && downloadReport(savedId)}
-            disabled={!isSaved || !savedId}
-            tooltip={!isSaved ? "Please save the scan first to generate a PDF report." : ""}
+            className="fab-pos-1"
+            onClick={handleReset}
           >
-            <FileText size={16} />
-            Generate PDF
+            <RefreshCw size={16} />
+            New Analysis
           </FloatingActionButton>
 
-          <AbbreviationsPanel
-            isOpen={showAbbreviations}
-            onClose={closeAbbreviations}
-          />
-        </>
+          {data && !insufficientDetections && (
+            <>
+              <FloatingActionButton
+                variant="success"
+                size="md"
+                className="fab-pos-4"
+                onClick={toggleAbbreviations}
+              >
+                <BookOpen size={16} />
+                Abbreviations
+              </FloatingActionButton>
+
+              <FloatingActionButton
+                variant="save"
+                size="md"
+                isActive={isSaved}
+                className="fab-pos-3"
+                onClick={handleSave}
+                disabled={isSaving || isSaved}
+              >
+                <ShieldCheck size={16} />
+                {isSaving ? "Saving..." : isSaved ? "Saved" : "Save Scan"}
+              </FloatingActionButton>
+
+              <FloatingActionButton
+                variant="default"
+                size="md"
+                className="fab-pos-2"
+                onClick={() => savedId && downloadReport(savedId)}
+                disabled={!isSaved || !savedId}
+                tooltip={!isSaved ? "Please save the scan first to generate a PDF report." : ""}
+              >
+                <FileText size={16} />
+                Generate PDF
+              </FloatingActionButton>
+            </>
+          )}
+        </FABMobileMenu>
+      )}
+
+      {data && !isLoading && !insufficientDetections && (
+        <AbbreviationsPanel
+          isOpen={showAbbreviations}
+          onClose={closeAbbreviations}
+        />
       )}
 
       {showSaveConfirm && (

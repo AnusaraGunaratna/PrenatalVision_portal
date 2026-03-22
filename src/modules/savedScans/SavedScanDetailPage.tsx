@@ -9,6 +9,7 @@ import { MetricItem } from "../../libs/components/MetricItem";
 import { LoadingPortal } from "../../libs/components/LoadingPortal";
 import { ErrorBanner } from "../../libs/components/ErrorBanner";
 import { FloatingActionButton } from "../../libs/components/FloatingActionButton";
+import { FABMobileMenu } from "../../libs/components/FloatingActionButton/FABMobileMenu";
 import { AbbreviationsPanel } from "../../libs/components/AbbreviationsPanel";
 import { ImageAnalysisFlow } from "../scanAnalysis/components/ImageAnalysisFlow";
 import { ModelComparisonTable } from "../scanAnalysis/components/ModelComparisonTable";
@@ -209,36 +210,38 @@ export const SavedScanDetailPage: FC = () => {
         )}
       </div>
 
-      <FloatingActionButton
-        variant="success"
-        size="md"
-        className="fab-pos-3"
-        onClick={toggleAbbreviations}
-      >
-        <BookOpen size={16} />
-        Abbreviations
-      </FloatingActionButton>
+      <FABMobileMenu>
+        <FloatingActionButton
+          variant="success"
+          size="md"
+          className="fab-pos-3"
+          onClick={toggleAbbreviations}
+        >
+          <BookOpen size={16} />
+          Abbreviations
+        </FloatingActionButton>
 
-      <FloatingActionButton
-        variant="default"
-        size="md"
-        className="fab-pos-2"
-        onClick={() => id && downloadReport(id)}
-        disabled={isDownloading}
-      >
-        <FileText size={16} />
-        {isDownloading ? "Generating..." : "Generate PDF"}
-      </FloatingActionButton>
+        <FloatingActionButton
+          variant="default"
+          size="md"
+          className="fab-pos-2"
+          onClick={() => id && downloadReport(id)}
+          disabled={isDownloading}
+        >
+          <FileText size={16} />
+          {isDownloading ? "Generating..." : "Generate PDF"}
+        </FloatingActionButton>
 
-      <FloatingActionButton
-        variant="default"
-        size="md"
-        className="fab-pos-1"
-        onClick={() => navigate("/")}
-      >
-        <RefreshCw size={16} />
-        New Analysis
-      </FloatingActionButton>
+        <FloatingActionButton
+          variant="default"
+          size="md"
+          className="fab-pos-1"
+          onClick={() => navigate("/")}
+        >
+          <RefreshCw size={16} />
+          New Analysis
+        </FloatingActionButton>
+      </FABMobileMenu>
 
       <AbbreviationsPanel
         isOpen={showAbbreviations}
