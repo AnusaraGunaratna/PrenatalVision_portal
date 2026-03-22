@@ -1346,6 +1346,104 @@
     bottom: calc(var(--sp-12) + 144px + var(--sp-14));
 }
 
+/*  FAB Mobile Menu  */
+.fab-mobile-menu-container {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    z-index: var(--z-float);
+    pointer-events: none; 
+}
+
+.fab-mobile-menu-container .fab {
+    pointer-events: auto; 
+}
+
+.fab-trigger {
+    z-index: calc(var(--z-float) + 10);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    min-width: 60px;
+    border-radius: 30px;
+    padding: 0 var(--sp-6);
+}
+
+.fab-trigger-text {
+    font-weight: 600;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+}
+
+.fab-trigger:active {
+    transform: scale(0.95);
+}
+
+.fab-trigger--active {
+    background: var(--color-danger-mid) !important;
+    border-color: var(--color-danger-light) !important;
+}
+
+.fab-mobile-stack {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-4);
+    pointer-events: none;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s var(--ease-smooth);
+    z-index: var(--z-float);
+}
+
+.fab-mobile-stack--open {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.fab-mobile-stack--open .fab-tooltip {
+    display: none !important;
+}
+
+.fab-mobile-stack .fab {
+    position: static;
+    transform: translateY(20px);
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
+    opacity: 0;
+    margin-right: var(--sp-12);
+    margin-bottom: var(--sp-4);
+}
+
+.fab-mobile-stack .fab:last-child {
+    margin-bottom: calc(var(--sp-12) + 60px + var(--sp-4));
+}
+
+.fab-mobile-stack--open .fab {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+/* Staggered animation for rising buttons */
+.fab-mobile-stack--open .fab:nth-last-child(1) { transition-delay: 0.05s; }
+.fab-mobile-stack--open .fab:nth-last-child(2) { transition-delay: 0.1s; }
+.fab-mobile-stack--open .fab:nth-last-child(3) { transition-delay: 0.15s; }
+.fab-mobile-stack--open .fab:nth-last-child(4) { transition-delay: 0.2s; }
+
+.fab-menu-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: var(--z-float);
+    pointer-events: auto;
+    animation: fadeIn 0.3s ease;
+}
+
 /*  Abbreviations Side Panel (right-anchored, non-blocking)  */
 .abbrev-side-panel {
     position: fixed;
