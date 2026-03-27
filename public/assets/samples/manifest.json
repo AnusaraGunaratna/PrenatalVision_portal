@@ -1,6 +1,13 @@
 {
-  "updatedAt": "2026-03-15T22:18:56.600Z",
+  "updatedAt": "2026-03-27T23:14:44.373Z",
   "samples": [
+    {
+      "id": "crl-0b022a75cc6a19d4d4b5d423613fc5464474274466c335316a2c0f8a965b36dd.jpg",
+      "name": "0b022a75cc6a19d4d4b5d423613fc5464474274466c335316a2c0f8a965b36dd",
+      "fileName": "0b022a75cc6a19d4d4b5d423613fc5464474274466c335316a2c0f8a965b36dd.jpg",
+      "url": "/assets/samples/crl/0b022a75cc6a19d4d4b5d423613fc5464474274466c335316a2c0f8a965b36dd.jpg",
+      "type": "crl"
+    },
     {
       "id": "crl-0d4c69e56a95aa2996ffb08b4efa5e4b2c9624e11b237bc02ebab777288f9f81.jpg",
       "name": "0d4c69e56a95aa2996ffb08b4efa5e4b2c9624e11b237bc02ebab777288f9f81",
@@ -9,10 +16,10 @@
       "type": "crl"
     },
     {
-      "id": "crl-3CRL.jpg",
-      "name": "3CRL",
-      "fileName": "3CRL.jpg",
-      "url": "/assets/samples/crl/3CRL.jpg",
+      "id": "crl-0e558a25f57d9184b4d0763d6cf8e7f8e936a6c3cddc2dbf51aae91eafa66a05.jpg",
+      "name": "0e558a25f57d9184b4d0763d6cf8e7f8e936a6c3cddc2dbf51aae91eafa66a05",
+      "fileName": "0e558a25f57d9184b4d0763d6cf8e7f8e936a6c3cddc2dbf51aae91eafa66a05.jpg",
+      "url": "/assets/samples/crl/0e558a25f57d9184b4d0763d6cf8e7f8e936a6c3cddc2dbf51aae91eafa66a05.jpg",
       "type": "crl"
     },
     {
@@ -37,24 +44,10 @@
       "type": "crl"
     },
     {
-      "id": "crl-Screenshot 2026-03-09 143348.png",
-      "name": "Screenshot 2026 03 09 143348",
-      "fileName": "Screenshot 2026-03-09 143348.png",
-      "url": "/assets/samples/crl/Screenshot 2026-03-09 143348.png",
-      "type": "crl"
-    },
-    {
       "id": "crl-test1.jpg",
       "name": "Test1",
       "fileName": "test1.jpg",
       "url": "/assets/samples/crl/test1.jpg",
-      "type": "crl"
-    },
-    {
-      "id": "crl-test2.jpg",
-      "name": "Test2",
-      "fileName": "test2.jpg",
-      "url": "/assets/samples/crl/test2.jpg",
       "type": "crl"
     },
     {
@@ -79,13 +72,6 @@
       "type": "nt"
     },
     {
-      "id": "nt-hq720.jpg",
-      "name": "Hq720",
-      "fileName": "hq720.jpg",
-      "url": "/assets/samples/nt/hq720.jpg",
-      "type": "nt"
-    },
-    {
       "id": "nt-Screenshot 2026-03-09 141931.png",
       "name": "Screenshot 2026 03 09 141931",
       "fileName": "Screenshot 2026-03-09 141931.png",
@@ -104,13 +90,6 @@
       "name": "Screenshot 2026 03 09 141954",
       "fileName": "Screenshot 2026-03-09 141954.png",
       "url": "/assets/samples/nt/Screenshot 2026-03-09 141954.png",
-      "type": "nt"
-    },
-    {
-      "id": "nt-Screenshot 2026-03-09 142004.png",
-      "name": "Screenshot 2026 03 09 142004",
-      "fileName": "Screenshot 2026-03-09 142004.png",
-      "url": "/assets/samples/nt/Screenshot 2026-03-09 142004.png",
       "type": "nt"
     },
     {
@@ -139,13 +118,6 @@
       "name": "Screenshot 2026 03 09 142206",
       "fileName": "Screenshot 2026-03-09 142206.png",
       "url": "/assets/samples/nt/Screenshot 2026-03-09 142206.png",
-      "type": "nt"
-    },
-    {
-      "id": "nt-Screenshot 2026-03-09 142219.png",
-      "name": "Screenshot 2026 03 09 142219",
-      "fileName": "Screenshot 2026-03-09 142219.png",
-      "url": "/assets/samples/nt/Screenshot 2026-03-09 142219.png",
       "type": "nt"
     },
     {
